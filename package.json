@@ -1,0 +1,26 @@
+{
+  "name": "best-sample",
+  "version": "1.0.0",
+  "description": "a sample app backend in express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.hootops.com:Platform/sdk-sample-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.15.3",
+    "js-sha512": "^0.4.0",
+    "socket.io": "^2.0.3",
+    "twit": "^2.2.9"
+  },
+  "engines": {
+    "node": "8.2.1"
+  }
+}
