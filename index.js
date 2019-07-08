@@ -4,8 +4,6 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const sha512 = require('js-sha512');
-var Twitter = require('twit');
 
 const app = express();
 
@@ -17,83 +15,13 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true });
 app.use(jsonParser);
 app.use(urlencodedParser);
 
-var secret = '';
-
-//--- Client for hydrating twitter data - ADD YOUR OWN CREDENTIALS --- 
-//--- Otherwise, app will not show up in plugin list --- 
-try {
-  var twitterClient = new Twitter({
-    consumer_key: process.env.TWITTER_CONSUMER_KEY,
-    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    access_token: process.env.TWITTER_ACCESS_TOKEN,
-    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-  });
-} catch(error) {
-  console.log('No Twitter API credenitals found');
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// async function sendFakeMessages(socket) {
-//   // emit a scripted set of messages
-//   await sleep(2000);
-//   socket.emit('stream update', 'hello!');
-//   await sleep(2000);
-//   socket.emit('stream update', 'hey, how are you?');
-//   await sleep(2000);
-//   socket.emit('stream update', 'i\'m good thanks, how are you?');
-//   await sleep(2000);
-//   socket.emit('stream update', 'i\'m good too');
-// }
-
-// See "Configuring your Shared Secret" section in README.md
-try {
-  secret = process.env.SHARED_SECRET;
-} catch (err) {
-  console.log('SHARED_SECRET is missing from .env');
-}
-
-app.get('/gen-token', (req, res) => {
-  // Combines information to create an auth token
-  // Auth token is retrieved by an AJAX request from stream.js
-  if (secret === '') {
-    console.log('Token generation failed because of missing shared secret');
-    res.status(500).send({error: 'Token generation failed because of missing shared secret'});
-  } else {
-    res.send(sha512(req.query.userId.toString() +
-                    req.query.timestamp.toString() +
-                    req.query.url.toString() + secret));
-  }
-});
 
 app.post('/stream', (req, res) => {
 	res.sendFile(__dirname + '/stream.html');
 });
 
-app.get('/stream', (req, res) => {
-	res.sendFile(__dirname + '/stream.html');
-});
 
 app.use('/assets', express.static('assets'));
-
-app.post('/plugin', (req, res) => {
-  res.sendFile(__dirname + '/plugin.html');
-});
-
-app.get('/plugin', (req, res) => {
-  res.sendFile(__dirname + '/plugin.html');
-});
-
-app.get('/modal', (req, res) => {
-  res.sendFile(__dirname + '/modal.html');
-});
-
-app.post('/', (req, res) => {
-  console.log(req.data);
-  res.send({"hello": "world"});
-});
 
 app.post('/webhooks', (req, res) => {
   console.log("Webhook content:\n\n%s", JSON.stringify(req.body));
@@ -108,52 +36,6 @@ app.post('/callbacks', (req, res) => {
   res.status(200).send('{"success":true}').end();
 });
 
-// GET /twitterAccounts?account_ids=<comma,separated,ids>
-app.get('/twitterAccounts', (req, res) => {
-  // there is, of course, better ways to do this
-  if (req.header('secretKey') == 'super_secret') {
-    var accountIds = req.query.accountIds;
-    if (!accountIds) {
-      res.status(400).send('Missing Twitter Credentials');
-      return;
-    } else {
-      twitterClient.get('users/lookup', { user_id: accountIds })
-        .catch(function(err) {
-          console.log('caught error', err.stack);
-        })
-        .then(function (result) {
-          var accountNames = result.data.map(function(account) {
-            return account.name
-          });
-          res.send(accountNames);
-          return;
-        });
-    }
-  } else {
-    res.sendStatus(401);
-  }
-});
-
-// GET /tweets/<id>
-app.get('/tweets/:tweetId', (req, res) => {
-  if (req.header('secretKey') == 'super_secret') {
-    if (!req.params.tweetId) {
-      res.sendStatus(400);
-      return;
-    } else {
-      twitterClient.get('statuses/show', { id: req.params.tweetId })
-        .catch(function(err) {
-          console.log('caught error', err.stack);
-        })
-        .then(function (result) {
-          res.send(result.data);
-          return;
-        });
-    }
-  } else {
-    res.sendStatus(401);
-  }
-});
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -177,9 +59,8 @@ if (fs.existsSync('certs/server.crt') && fs.existsSync('certs/server.key')) {
 
 const io = require('socket.io')(server);
 
-// io.on('connection', function (socket) {
-//   sendFakeMessages(socket);
-//   socket.on('restart', function(data) {
-//     sendFakeMessages(socket);
-//   });
-// });
+io.on('connection', function (socket) {
+  socket.on('refresh', function(data) {
+    console.log('Refresh received on server', data);
+  });
+});
