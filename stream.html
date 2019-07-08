@@ -15,53 +15,12 @@
   <link rel="stylesheet" type="text/css" href="./assets/style.css">
 </head>
 <body style="background: white;">
+  <form onsubmit="addLocation(); return false;">
+    <input name="location" id="location" placeholder="Add a location..." autocomplete="off">
+  </form>
+  <div class="hs_messages" id="weather"></div>
+<button onclick="removeLocation()">Clear all</button>
+<button onclick="populateWeatherDiv()">Refresh</button>
 
-  <div class="hs_messages">
-
-    <div class="hs_message">
-      <div class="hs_avatar">
-        <img src="http://openweathermap.org/img/wn/10d@2x.png" class="hs_avatarImage" alt="Avatar">
-      </div>
-
-      <div class="hs_content">
-        <a href="#" class="hs_userName" target="_blank">Vancouver</a>
-        <div class="hs_contentText">
-          <p>
-            <span class="hs_postBody">Loading...</span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="hs_message">
-      <div class="hs_avatar">
-        <img src="http://openweathermap.org/img/wn/10d@2x.png" class="hs_avatarImage" alt="Avatar">
-      </div>
-
-      <div class="hs_content">
-        <a href="#" class="hs_userName" target="_blank">Vancouver</a>
-        <div class="hs_contentText">
-          <p>
-            <span class="hs_postBody">Loading...</span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="hs_message">
-      <div class="hs_avatar">
-        <img src="http://openweathermap.org/img/wn/10d@2x.png" class="hs_avatarImage" alt="Avatar">
-      </div>
-
-      <div class="hs_content">
-        <a href="#" class="hs_userName" target="_blank">Vancouver</a>
-        <div class="hs_contentText">
-          <p>
-            <span class="hs_postBody">Loading...</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
