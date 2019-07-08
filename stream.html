@@ -18,10 +18,13 @@
   <form onsubmit="addLocation(); return false;">
     <input name="location" id="location" placeholder="Add a location..." autocomplete="off">
   </form>
-  <div class="hs_messages" id="weather"></div>
-<button onclick="removeLocation()">Clear all</button>
-<button onclick="populateWeatherDiv()">Refresh</button>
-<p id="last_updated">Last updated: never</p>
+  <div class="hs_messages" id="weather">
+    <h3>You have no locations added</h3>
+  </div>
 
+  <button onclick="removeLocation()">Clear all</button>
+  <button onclick="populateWeatherDiv()">Refresh</button>
+
+  <p id="last_updated">Last updated: never</p>
 </body>
 </html>

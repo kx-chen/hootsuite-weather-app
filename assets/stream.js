@@ -1,6 +1,9 @@
 'use strict';
 
-// TODO: not hardcode
+let config = {
+
+};
+
 async function getSavedLocations() {
   return new Promise((resolve) => {
     hsp.getData((data) => {
@@ -31,22 +34,31 @@ async function addLocation() {
 
 async function removeLocation() {
   hsp.saveData([], () => {
-    populateWeatherDiv();
+    clearWeatherDiv();
   });
 }
 
 async function loadWeather(city) {
+  // TODO: don't push api key
   let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}
                &appid=6cfd34fc94e03afb78bee39afd8989bb&units=metric`);
   return await weatherJson.json();
 }
 
 function parseWeatherJson(weatherJson) {
+  if (weatherJson['message']) {
+    return {
+      "name": 'City not found',
+      "temperature": 'Unknown',
+      "weather": 'Unknown',
+      "icon": '/assets/question.png',
+    }
+  }
   return {
-    "temperature": weatherJson['main']['temp'],
-    "weather": weatherJson['weather'][0]['main'],
-    "name": weatherJson['name'],
-    "icon": weatherJson['weather'][0]['icon'],
+    "temperature": weatherJson['main']['temp'] ||'',
+    "weather": weatherJson['weather'][0]['main'] || 'Unknown',
+    "name": weatherJson['name'] || 'Unknown Location',
+    "icon": `http://openweathermap.org/img/wn/${weatherJson['weather'][0]['icon']}@2x.png`,
   };
 }
 // TODO: rename classes
@@ -60,13 +72,13 @@ function updateSingleWeatherLocation(weather, indexToUpdate) {
 
   $('.hs_userName').each((index, element) => {
     if(index === indexToUpdate) {
-      element.innerHTML = `${weather['name']}`;
+      element.innerHTML = weather['name'];
     }
   });
 
   $('.hs_avatarImage').each((index, element) => {
     if(index === indexToUpdate) {
-      element.src = `http://openweathermap.org/img/wn/${weather['icon']}@2x.png`;
+      element.src = weather['icon'];
     }
   });
 }
@@ -80,7 +92,7 @@ function generateBoilerplateHTML(){
       </div>
 
       <div class="hs_content">
-        <a href="#" class="hs_userName" target="_blank">Vancouver</a>
+        <p href="#" class="hs_userName"></p>
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">Loading...</span>
@@ -100,17 +112,20 @@ function clearWeatherDiv() {
 
 async function populateWeatherDiv() {
   // TODO: not use forEach
-  clearWeatherDiv();
   let locations = await getSavedLocations();
 
-  locations.forEach(async (location, index) => {
-    generateBoilerplateHTML();
-    let weatherJson = await loadWeather(location);
-    let weather = parseWeatherJson(weatherJson);
-    updateSingleWeatherLocation(weather, index);
-  });
+  if (locations) {
+    clearWeatherDiv();
+    locations.forEach(async (location, index) => {
+      generateBoilerplateHTML();
+      let weatherJson = await loadWeather(location);
 
-  document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`
+      let weather = parseWeatherJson(weatherJson);
+      updateSingleWeatherLocation(weather, index);
+    });
+
+    document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`
+  }
 }
 
 
@@ -123,6 +138,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   let socket = io();
   hsp.bind('refresh', function () {
+    populateWeatherDiv();
     console.log('refresh.');
     socket.emit('refresh');
   });
