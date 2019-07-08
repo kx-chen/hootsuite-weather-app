@@ -109,6 +109,8 @@ async function populateWeatherDiv() {
     let weather = parseWeatherJson(weatherJson);
     updateSingleWeatherLocation(weather, index);
   });
+
+  document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`
 }
 
 
