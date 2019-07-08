@@ -1,50 +1,70 @@
 'use strict';
 
+// TODO: not hardcode
 function getSavedLocations() {
-  return ['Vancouver, CA', 'Ottawa, CA'];
+  return ['Vancouver, CA', 'Ottawa, CA', 'Vernon, CA'];
 }
 
-async function loadWeather() {
-  var weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Vancouver,Ca
+function saveLocations() {
+
+}
+
+async function loadWeather(city) {
+  let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}
                &appid=6cfd34fc94e03afb78bee39afd8989bb&units=metric`);
   return await weatherJson.json();
 }
 
 function parseWeatherJson(weatherJson) {
-  // TODO: Improve bracket style/mapping
   return {
     "temperature": weatherJson['main']['temp'],
     "weather": weatherJson['weather'][0]['main'],
     "name": weatherJson['name'],
+    "icon": weatherJson['weather'][0]['icon'],
   };
 }
-// http://openweathermap.org/img/wn/10d@2x.png
-// TODO: rename
+// TODO: rename classes
+// TODO: do all in one loop
 function updateSingleWeatherLocation(weather, indexToUpdate) {
-  var d = $('.hs_postBody').each((index, element) => {
+  $('.hs_postBody').each((index, element) => {
     console.log(index, element);
     if(index === indexToUpdate) {
       element.innerHTML = `${weather['temperature']} Degrees | ${weather['weather']}`;
     }
   });
-  return 'aaa';
+
+  $('.hs_userName').each((index, element) => {
+    console.log(index, element);
+    if(index === indexToUpdate) {
+      element.innerHTML = `${weather['name']}`;
+    }
+  });
+
+  $('.hs_avatarImage').each((index, element) => {
+    console.log(index, element);
+    if(index === indexToUpdate) {
+      element.src = `http://openweathermap.org/img/wn/${weather['icon']}@2x.png`;
+    }
+  });
 }
 
-function generateHTMLforLocations(locations) {
+function generateBoilerplateHTML(){
 
 }
 
-// for our purposes this is the same thing as jQuery's  $(document).ready(...)
 document.addEventListener('DOMContentLoaded', async function () {
   hsp.init({
     useTheme: true
   });
 
-  var weatherJson = await loadWeather();
-  var weather = parseWeatherJson(weatherJson);
-  updateSingleWeatherLocation(weather, 0);
+  // TODO: not use forEach
+  getSavedLocations().forEach(async (location, index) => {
+    let weatherJson = await loadWeather(location);
+    let weather = parseWeatherJson(weatherJson);
+    updateSingleWeatherLocation(weather, index);
+  });
 
-  var socket = io();
+  let socket = io();
   hsp.bind('refresh', function () {
     console.log('refresh.');
     socket.emit('refresh');
