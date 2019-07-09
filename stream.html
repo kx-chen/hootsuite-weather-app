@@ -15,6 +15,126 @@
   <link rel="stylesheet" type="text/css" href="./assets/style.css">
 </head>
 <body style="background: white;">
+<div class="hs_topBar">
+  <div class="hs_topBarContent">
+    <!--Right-Side Controls-->
+    <ul class="hs_topBarControls">
+      <li class="hs_topBarControlsBtn hs_sdkBtn" data-dropdown="sdk" title="More">
+        SDK Functions
+      </li>
+      <li class="hs_topBarControlsBtn hs_ellipsesBtn" data-dropdown="ellipses" title="More">
+        <span class="icon-app-dir x-ellipsis"></span>
+      </li>
+    </ul>
+
+    <!--Left-Side Title-->
+    <h1 class="hs_topBarTitle"></h1>
+  </div>
+
+  <!--Menu List-->
+  <ul class="hs_topBarDropdown hs_ellipsesDropdown hs_dropdownMenuList" data-dropdown="ellipses" style="display: none;">
+    <li class="hs_dropdownMenuListItem"><a class="hs_loggedIn" target="_blank">Not logged in</a></li>
+    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://hootsuite.com/help">Help</a></li>
+    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://feedback.hootsuite.com/discussions">Feedback</a></li>
+    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://github.com/">Developer</a></li>
+    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://hootsuite.s3.amazonaws.com/jsapi/1-0/app_stream_template.html">Hootsuite CSS theme for apps</a></li>
+    <li class="hs_dropdownMenuListItem hs_logout" style="display: none"><a>Logout</a></li>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-prompt="select_account"></div>
+  </ul>
+  <ul class="hs_topBarDropdown hs_sdkDropdown hs_dropdownMenuList" data-dropdown="sdk" style="display: none;">
+    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://app-directory.s3.amazonaws.com/docs/sdk/v4.0/index.html">SDK Functions</a></li>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_showImagePreview">
+        showImagePreview()
+      </button>
+      <input class="hs_sdkInput hs_showImagePreviewInput" value="https://hootsuite.com/var/hootsuite/storage/images/media/images/media-kit/office-photos/hq2/53153-2-eng-US/hq2.jpg" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_showLightbox">
+        showLightbox()
+      </button>
+      <input class="hs_sdkInput hs_showLightboxInput" value="https://hootsuite.com/var/hootsuite/storage/images/media/images/media-kit/office-photos/hq2/53153-2-eng-US/hq2.jpg" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_showStatusMessage">
+        showStatusMessage()
+      </button>
+      <input class="hs_sdkInput hs_showStatusMessageInput" value="message" type="text"></input>
+      <input class="hs_sdkInput hs_showStatusMessageTypeInput" value="info" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_showUser">
+        showUser()
+      </button>
+      <input class="hs_sdkInput hs_showUserInput" value="hootsuite" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_composeMessage">
+        composeMessage()
+      </button>
+      <input class="hs_sdkInput hs_composeMessageInput" value="Message composed with the Hootsuite JavaScript SDK." type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_attachFile">
+        attachFileToMessage()
+      </button>
+      <input class="hs_sdkInput hs_attachFileInput" value="https://hootsuite.com/var/hootsuite/storage/images/media/images/media-kit/office-photos/hq2/53153-2-eng-US/hq2.jpg" type="text"></input>
+      <input class="hs_sdkInput hs_attachFileImageName" value="Image Name" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_updatePlacementSubtitle">
+        updatePlacementSubtitle()
+      </button>
+      <input class="hs_sdkInput hs_updatePlacementSubtitleInput" value="Enter Subtitle Here" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_getTwitterAccounts">
+        getTwitterAccounts()
+      </button>
+      <span class="hs_getTwitterAccountsOutput"></span>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_retweet">
+        retweet()
+      </button>
+      <input class="hs_sdkInput hs_retweetInput" value="https://twitter.com/hootsuite/status/887798023752994816" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_showFollowDialog">
+        showFollowDialog()
+      </button>
+      <input class="hs_sdkInput hs_showFollowDialogName" value="Hootsuite" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_assignItem">
+        assignItem()
+      </button>
+      <input class="hs_sdkInput hs_assignMessageAuthor" value="Hootsuite" type="text"></input>
+      <input class="hs_sdkInput hs_assignMessageAuthorAvatar" value="https://hootsuite.com//uploads/downloadable-assets/512px-owly-black-suit.jpg" type="text"></input>
+      <input class="hs_sdkInput hs_assignMessage" value="Default Assignment Message" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_saveData">
+        saveData()
+      </button>
+      <input class="hs_sdkInput hs_saveDataInput" value="Save Data" type="text"></input>
+    </div>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeCta hs_getData">
+        getData()
+      </button>
+      <span class="hs_getDataOutput"></span>
+    </div>
+    <hr>
+    <div class="hs_sdkContainer">
+      <button class="hs_btnCtaSml hs_btnTypeSubmit hs_showGeolocation">
+        showGeolocation()
+      </button>
+    </div>
+  </ul>
+</div>
+<div>
+<div class="container">
   <form onsubmit="addLocation(); return false;">
     <input name="location" id="location" placeholder="Add a location..." autocomplete="off">
   </form>
@@ -22,9 +142,10 @@
     <h3>You have no locations added</h3>
   </div>
 
-  <button onclick="removeLocation()">Clear all</button>
+  <button onclick="removeAllLocations()">Clear all</button>
   <button onclick="populateWeatherDiv()">Refresh</button>
 
   <p id="last_updated">Last updated: never</p>
+</div>
 </body>
 </html>

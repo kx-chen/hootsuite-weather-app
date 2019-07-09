@@ -1,5 +1,3 @@
-'use strict';
-
 let config = {
 
 };
@@ -9,9 +7,7 @@ async function getSavedLocations() {
     hsp.getData((data) => {
       resolve(data);
     });
-  }).catch((err) => {
-    console.log(err);
-  });
+  }).catch((err) => console.log(err));
 
 }
 
@@ -26,15 +22,34 @@ async function addLocation() {
   locations.push(locationForm.value);
   // TODO: handle errors
   hsp.saveData(locations, () => {
-    console.log('location added, value:', document.getElementById('location').value);
     populateWeatherDiv();
     locationForm.value = '';
   });
 }
 
-async function removeLocation() {
+async function removeLocation(index) {
+  let locations = document.getElementsByClassName('hs_message');
+
+  for(let i = 0; i < locations.length; i++) {
+    if(i === index) {
+      clearDivById(index);
+    }
+  }
+
+  let locationsList = await getSavedLocations();
+  locationsList.reverse();
+  console.log('before', locationsList);
+  locationsList.splice(index, 1);
+  console.log(locationsList);
+
+  hsp.saveData(locationsList, (div) => {
+    console.log(div);
+  });
+}
+
+async function removeAllLocations() {
   hsp.saveData([], () => {
-    clearWeatherDiv();
+    clearDivById();
   });
 }
 
@@ -46,7 +61,9 @@ async function loadWeather(city) {
 }
 
 function parseWeatherJson(weatherJson) {
+  // 'message' key only exists if there has been an error
   if (weatherJson['message']) {
+    // return generic error text
     return {
       "name": 'City not found',
       "temperature": 'Unknown',
@@ -54,6 +71,7 @@ function parseWeatherJson(weatherJson) {
       "icon": '/assets/question.png',
     }
   }
+
   return {
     "temperature": weatherJson['main']['temp'] ||'',
     "weather": weatherJson['weather'][0]['main'] || 'Unknown',
@@ -63,7 +81,7 @@ function parseWeatherJson(weatherJson) {
 }
 // TODO: rename classes
 // TODO: do all in one loop
-function updateSingleWeatherLocation(weather, indexToUpdate) {
+function updateSingleWeatherDiv(weather, indexToUpdate) {
   $('.hs_postBody').each((index, element) => {
     if(index === indexToUpdate) {
       element.innerHTML = `${weather['temperature']} Degrees | ${weather['weather']}`;
@@ -83,10 +101,10 @@ function updateSingleWeatherLocation(weather, indexToUpdate) {
   });
 }
 
-function generateBoilerplateHTML(){
+function generateBoilerplateHTML(index){
   let weatherDiv = document.getElementById('weather');
   weatherDiv.insertAdjacentHTML('afterbegin',
-      `<div class="hs_message">
+      `<div class="hs_message" id="${index}">
       <div class="hs_avatar">
         <img src="http://openweathermap.org/img/wn/10d@2x.png" class="hs_avatarImage" alt="Avatar">
       </div>
@@ -96,6 +114,7 @@ function generateBoilerplateHTML(){
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">Loading...</span>
+            <button class="remove_location" onclick="removeLocation(${index});">X</button>
           </p>
         </div>
       </div>
@@ -103,8 +122,9 @@ function generateBoilerplateHTML(){
 
 }
 
-function clearWeatherDiv() {
-  let weatherDiv = document.getElementById('weather');
+function clearDivById(div) {
+  let weatherDiv = document.getElementById(div);
+
   while (weatherDiv.firstChild) {
     weatherDiv.removeChild(weatherDiv.firstChild);
   }
@@ -115,13 +135,13 @@ async function populateWeatherDiv() {
   let locations = await getSavedLocations();
 
   if (locations) {
-    clearWeatherDiv();
-    locations.forEach(async (location, index) => {
-      generateBoilerplateHTML();
-      let weatherJson = await loadWeather(location);
+    clearDivById('weather');
 
+    locations.forEach(async (location, index) => {
+      generateBoilerplateHTML(index);
+      let weatherJson = await loadWeather(location);
       let weather = parseWeatherJson(weatherJson);
-      updateSingleWeatherLocation(weather, index);
+      updateSingleWeatherDiv(weather, index);
     });
 
     document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`
@@ -130,17 +150,9 @@ async function populateWeatherDiv() {
 
 
 document.addEventListener('DOMContentLoaded', async function () {
-  hsp.init({
-    useTheme: true
-  });
+  hsp.init({useTheme: true});
 
   populateWeatherDiv();
 
-  let socket = io();
-  hsp.bind('refresh', function () {
-    populateWeatherDiv();
-    console.log('refresh.');
-    socket.emit('refresh');
-  });
-
+  hsp.bind('refresh', () => populateWeatherDiv());
 });
