@@ -1,4 +1,5 @@
 let weatherResults = [];
+let config = [];
 
 'use strict';
 
@@ -215,30 +216,31 @@ async function loadWeather(city) {
   return await weatherJson.json();
 }
 
-function parseWeatherJson(weatherJson, id) {
-  // 'message' key only exists if there has been an error
-  if (weatherJson['message']) {
-    // return generic error text
-    return {
-      "id": id,
-      "name": 'City not found',
-      "temperature": 'Unknown',
-      "weather": 'Unknown',
-      "icon": '/assets/question.png',
+async function parseWeatherJson(weatherJson, id) {
+  return new Promise((resolve) => {
+    if (weatherJson['message']) {
+      // return generic error text
+      resolve({
+        "id": id,
+        "name": 'City not found',
+        "temperature": 'Unknown',
+        "weather": 'Unknown',
+        "icon": '/assets/question.png',
+      });
     }
-  }
 
-  return {
-    "id": id,
-    "temperature": weatherJson['main']['temp'] ||'',
-    "weather": weatherJson['weather'][0]['main'] || 'Unknown',
-    "name": weatherJson['name'] || 'Unknown Location',
-    "icon": `http://openweathermap.org/img/wn/${weatherJson['weather'][0]['icon']}@2x.png`,
-  };
+    resolve({
+      "id": id,
+      "temperature": weatherJson['main']['temp'] ||'',
+      "weather": weatherJson['weather'][0]['main'] || 'Unknown',
+      "name": weatherJson['name'] || 'Unknown Location',
+      "icon": `http://openweathermap.org/img/wn/${weatherJson['weather'][0]['icon']}@2x.png`,
+    });
+  });
 }
-// TODO: rename classes
-// TODO: do all in one loop
-function updateSingleWeatherDiv(weather, index) {
+
+
+function renderSingleWeatherDiv(weather, index) {
   let weatherDiv = document.getElementById('weather');
   weatherDiv.insertAdjacentHTML('afterbegin',
       `<div class="hs_message" id="${index}">
@@ -257,28 +259,6 @@ function updateSingleWeatherDiv(weather, index) {
       </div>
     </div>`);
 }
-//
-// function generateBoilerplateHTML(index){
-//   let weatherDiv = document.getElementById('weather');
-//   weatherDiv.insertAdjacentHTML('afterbegin',
-//       `<div class="hs_message" id="${index}">
-//       <div class="hs_avatar">
-//         <img src="http://openweathermap.org/img/wn/10d@2x.png" class="hs_avatarImage" alt="Avatar">
-//       </div>
-//
-//       <div class="hs_content">
-//         <p href="#" class="hs_userName"></p>
-//         <div class="hs_contentText">
-//           <p>
-//             <span class="hs_postBody">Loading...</span>
-//             <button class="remove_location" onclick="removeLocation(${index});">X</button>
-//           </p>
-//         </div>
-//       </div>
-//     </div>`);
-//
-// }
-//
 
 function clearDivContents(id) {
   let weatherDiv = document.getElementById(id);
@@ -302,16 +282,15 @@ async function populateWeatherDiv() {
     clearDivContents('weather');
     weatherResults = [];
 
-    locations.forEach(async (location, index) => {
-      // bindRemoveButton(index);
-
-      let weatherJson = await loadWeather(location);
-      let weather = parseWeatherJson(weatherJson, index);
+    for(let i = 0; i < locations.length; i++) {
+      let weatherJson = await loadWeather(locations[i]);
+      let weather = await parseWeatherJson(weatherJson, i);
       weatherResults.push(weather);
-      updateSingleWeatherDiv(weather, index);
-    });
+      renderSingleWeatherDiv(weather, i);
+    }
 
-    document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`
+
+    document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`;
   }
 }
 
