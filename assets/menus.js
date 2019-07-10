@@ -1,12 +1,12 @@
 function bindApiButtons() {
-    getSingleElementByClassName('hs_showImagePreview').addEventListener('click', function () {
-        hsp.showImagePreview(getSingleElementByClassName('hs_showImagePreviewInput').value, 'https://hootsuite.com');
-    });
-
-    getSingleElementByClassName('hs_showLightbox').addEventListener('click', function () {
-        // similar to showImagePreview
-        hsp.showLightbox(getSingleElementByClassName('hs_showLightboxInput').value);
-    });
+    // getSingleElementByClassName('hs_showImagePreview').addEventListener('click', function () {
+    //     hsp.showImagePreview(getSingleElementByClassName('hs_showImagePreviewInput').value, 'https://hootsuite.com');
+    // });
+    //
+    // getSingleElementByClassName('hs_showLightbox').addEventListener('click', function () {
+    //     // similar to showImagePreview
+    //     hsp.showLightbox(getSingleElementByClassName('hs_showLightboxInput').value);
+    // });
 }
 
 function loadTopBars() {
