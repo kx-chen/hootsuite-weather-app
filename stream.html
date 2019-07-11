@@ -21,7 +21,7 @@
     <!--Right-Side Controls-->
     <ul class="hs_topBarControls">
       <li class="hs_topBarControlsBtn hs_sdkBtn" data-dropdown="sdk" title="More">
-        <img height="26" style="margin-top: -5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAHlBMVEVMaXGIi4+Ah4yCh4yDiI2BhoyBh4yBh4yAh4yAhouZAMq8AAAACXRSTlMAG8FYOd+D86AAMG8OAAABF0lEQVRYw+1X2RKDIAw0gXD8/w+3djwiFQ3DtuMD+yqsIceyTNPAwMADkPKG1EWUFaiDx2si30HkNJHrIAqaKGBy3Zdt1kTcuJlSWOvjoiaKa5IoJDJGwfMef4hnhsyFc2yLbimUhJBPkIJYSyjZBGkq+BVumoGilSiSvXGukcyzdQdvbcClDd37DOTOvrQEJNtvvTSEROViVhmlMii5SHex+Li0+A2TvY/8xclvRUUNKtdrEQ0qt/ekqwpmNMmuVNWezJP2wRZR/VKJ/yVCHc2Dko0qP6ghUSMCG1qYjMCEDSe1MPHHXUewCxJ3Ze8m4jRdwW4ilK35Co5bbA3OaMGs30/MKMwewww77AlBmugZz6yBgQEQXgplKz7I4pSzAAAAAElFTkSuQmCC">
+        <img height="26" style="margin-top: -3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAHlBMVEVMaXGIi4+Ah4yCh4yDiI2BhoyBh4yBh4yAh4yAhouZAMq8AAAACXRSTlMAG8FYOd+D86AAMG8OAAABF0lEQVRYw+1X2RKDIAw0gXD8/w+3djwiFQ3DtuMD+yqsIceyTNPAwMADkPKG1EWUFaiDx2si30HkNJHrIAqaKGBy3Zdt1kTcuJlSWOvjoiaKa5IoJDJGwfMef4hnhsyFc2yLbimUhJBPkIJYSyjZBGkq+BVumoGilSiSvXGukcyzdQdvbcClDd37DOTOvrQEJNtvvTSEROViVhmlMii5SHex+Li0+A2TvY/8xclvRUUNKtdrEQ0qt/ekqwpmNMmuVNWezJP2wRZR/VKJ/yVCHc2Dko0qP6ghUSMCG1qYjMCEDSe1MPHHXUewCxJ3Ze8m4jRdwW4ilK35Co5bbA3OaMGs30/MKMwewww77AlBmugZz6yBgQEQXgplKz7I4pSzAAAAAElFTkSuQmCC">
       </li>
     </ul>
 
@@ -32,9 +32,12 @@
   <!--Menu List-->
 
   <ul class="hs_topBarDropdown hs_sdkDropdown hs_dropdownMenuList" data-dropdown="sdk" style="display: none;">
-    <li class="hs_dropdownMenuListItem"><p>Display Settings</p></li>
+    <li class="hs_dropdownMenuListItem" style="    padding-left: 10px;
+    font-weight: bold;
+    font-size: 1.5em;"><p>Display Settings</p></li>
+    <hr/>
     <div class="hs_sdkContainer">
-      <select>
+      <select id="temperature_select">
         <option value="celsius">Celsius</option>
         <option value="fahrenheit">Fahrenheit</option>
       </select>

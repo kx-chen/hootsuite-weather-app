@@ -39,3 +39,8 @@ function loadTopBars() {
         });
     });
 }
+
+function bindTemperatureSelect() {
+    let temperatureSelect = document.getElementById('temperature_select');
+
+}

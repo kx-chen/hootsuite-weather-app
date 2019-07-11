@@ -22,6 +22,7 @@
 .hs_sdkContainer {
     display: flex;
     margin-bottom: 10px;
+    padding-top: 15px;
 }
 
 .hs_sdkContainer:last-child {
