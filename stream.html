@@ -18,6 +18,7 @@
   <script src="./assets/menus.js"></script>
   <script src="./assets/stream.js"></script>
 
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans|Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./assets/style.css">
 </head>
 <body style="background: white;">
@@ -54,7 +55,10 @@
 <div>
 <div class="container">
   <form onsubmit="addLocation(); return false;">
-    <input name="location" id="location" placeholder="Add a location..." autocomplete="off">
+    <div class="form-group">
+      <label for="location">New location</label>
+      <input class="form-control" name="location" id="location" placeholder="Add a location..." autocomplete="off">
+    </div>
   </form>
 
   <div id="alerts">
@@ -64,8 +68,8 @@
     <h3>You have no locations added</h3>
   </div>
 
-  <button onclick="removeAllLocations()">Clear all</button>
-  <button onclick="populateWeatherDiv()">Refresh</button>
+  <button type="button" class="btn btn-primary" onclick="removeAllLocations()">Clear all</button>
+  <button type="button" class="btn btn-primary" onclick="populateWeatherDiv()">Refresh</button>
 
   <p id="last_updated">Last updated: never</p>
 </div>

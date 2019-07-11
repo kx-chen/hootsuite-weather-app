@@ -121,7 +121,7 @@ function renderSingleWeatherDiv(weather, index) {
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">${weather['temperature']} Degrees | ${weather['weather']}</span>
-            <button class="remove_location" onclick="removeLocation(${index});">X</button>
+            <button class="remove_location close" type="button" data-dismiss="alert" aria-label="Close" onclick="removeLocation(${index});">X</button>
           </p>
         </div>
       </div>
