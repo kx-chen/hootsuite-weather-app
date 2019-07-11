@@ -61,3 +61,7 @@ body {
 .container {
     margin-top: 40px;
 }
+
+.alert {
+    margin-top: 30px;
+}

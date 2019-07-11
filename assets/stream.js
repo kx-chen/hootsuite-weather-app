@@ -3,8 +3,7 @@ let config = {
   "units": "C",
 };
 
-'use strict';
-
+// TODO: city/location pick name
 
 async function getSavedLocations() {
   return new Promise((resolve) => {
@@ -12,12 +11,33 @@ async function getSavedLocations() {
       resolve(data);
     });
   }).catch((err) => console.log(err));
+}
 
+function displayError(error){
+  document.getElementById('alerts').innerHTML = `
+    <div class="alert alert-danger fade show" id="error-alert" role="alert">
+   ${error.message}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>`;
+
+  setTimeout(() => {
+    document.getElementById('alerts').innerHTML = '';
+  }, 3000);
 }
 
 async function addLocation() {
   let locationForm = document.getElementById('location');
   if (!locationForm.value) return;
+  let res = await checkIfLocationValid(locationForm.value);
+  if (!res) {
+    console.log('invalid');
+    displayError({
+      "message": "Location not found, please try again.",
+    });
+    return;
+  }
 
   let locations = await getSavedLocations();
   if (!locations) {
@@ -58,21 +78,24 @@ async function loadWeather(city) {
   // TODO: don't push api key
   let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}
                &appid=6cfd34fc94e03afb78bee39afd8989bb&units=metric`);
-  return await weatherJson.json();
+  if (weatherJson.status === 200) {
+    return await weatherJson.json();
+  }
+  return false;
 }
 
 async function parseWeatherJson(weatherJson, id) {
   return new Promise((resolve) => {
-    if (weatherJson['message']) {
-      // return generic error text
-      resolve({
-        "id": id,
-        "name": 'City not found',
-        "temperature": 'Unknown',
-        "weather": 'Unknown',
-        "icon": '/assets/question.png',
-      });
-    }
+    // if (weatherJson['message']) {
+    //   // return generic error text
+    //   resolve({
+    //     "id": id,
+    //     "name": 'City not found',
+    //     "temperature": 'Unknown',
+    //     "weather": 'Unknown',
+    //     "icon": '/assets/question.png',
+    //   });
+    // }
 
     resolve({
       "id": id,
@@ -119,6 +142,10 @@ function deleteDiv(id) {
   divToDelete.remove();
 }
 
+async function checkIfLocationValid(location){
+  return await loadWeather(location);
+}
+
 
 async function populateWeatherDiv() {
   let locations = await getSavedLocations();
@@ -130,8 +157,10 @@ async function populateWeatherDiv() {
     for(let i = 0; i < locations.length; i++) {
       let weatherJson = await loadWeather(locations[i]);
       let weather = await parseWeatherJson(weatherJson, i);
-      weatherResults.push(weather);
-      renderSingleWeatherDiv(weather, i);
+      if (weather) {
+        weatherResults.push(weather);
+        renderSingleWeatherDiv(weather, i);
+      }
     }
 
 
