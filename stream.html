@@ -60,16 +60,14 @@
       <input class="form-control" name="location" id="location" placeholder="Add a location..." autocomplete="off">
     </div>
   </form>
-
+  <button type="button" class="btn btn-primary" onclick="removeAllLocations()">Clear all</button>
+  <button type="button" class="btn btn-primary" onclick="populateWeatherDiv()">Refresh</button>
   <div id="alerts">
   </div>
 
   <div class="hs_messages" id="weather">
     <h3>You have no locations added</h3>
   </div>
-
-  <button type="button" class="btn btn-primary" onclick="removeAllLocations()">Clear all</button>
-  <button type="button" class="btn btn-primary" onclick="populateWeatherDiv()">Refresh</button>
 
   <p id="last_updated">Last updated: never</p>
 </div>
