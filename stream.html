@@ -27,7 +27,7 @@
     <!--Right-Side Controls-->
     <ul class="hs_topBarControls">
       <li class="hs_topBarControlsBtn hs_sdkBtn" data-dropdown="sdk" title="More">
-        <img height="26" style="margin-top: -3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAHlBMVEVMaXGIi4+Ah4yCh4yDiI2BhoyBh4yBh4yAh4yAhouZAMq8AAAACXRSTlMAG8FYOd+D86AAMG8OAAABF0lEQVRYw+1X2RKDIAw0gXD8/w+3djwiFQ3DtuMD+yqsIceyTNPAwMADkPKG1EWUFaiDx2si30HkNJHrIAqaKGBy3Zdt1kTcuJlSWOvjoiaKa5IoJDJGwfMef4hnhsyFc2yLbimUhJBPkIJYSyjZBGkq+BVumoGilSiSvXGukcyzdQdvbcClDd37DOTOvrQEJNtvvTSEROViVhmlMii5SHex+Li0+A2TvY/8xclvRUUNKtdrEQ0qt/ekqwpmNMmuVNWezJP2wRZR/VKJ/yVCHc2Dko0qP6ghUSMCG1qYjMCEDSe1MPHHXUewCxJ3Ze8m4jRdwW4ilK35Co5bbA3OaMGs30/MKMwewww77AlBmugZz6yBgQEQXgplKz7I4pSzAAAAAElFTkSuQmCC">
+        <img data-toggle="tooltip" title="Settings" height="26" style="margin-top: -3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAHlBMVEVMaXGIi4+Ah4yCh4yDiI2BhoyBh4yBh4yAh4yAhouZAMq8AAAACXRSTlMAG8FYOd+D86AAMG8OAAABF0lEQVRYw+1X2RKDIAw0gXD8/w+3djwiFQ3DtuMD+yqsIceyTNPAwMADkPKG1EWUFaiDx2si30HkNJHrIAqaKGBy3Zdt1kTcuJlSWOvjoiaKa5IoJDJGwfMef4hnhsyFc2yLbimUhJBPkIJYSyjZBGkq+BVumoGilSiSvXGukcyzdQdvbcClDd37DOTOvrQEJNtvvTSEROViVhmlMii5SHex+Li0+A2TvY/8xclvRUUNKtdrEQ0qt/ekqwpmNMmuVNWezJP2wRZR/VKJ/yVCHc2Dko0qP6ghUSMCG1qYjMCEDSe1MPHHXUewCxJ3Ze8m4jRdwW4ilK35Co5bbA3OaMGs30/MKMwewww77AlBmugZz6yBgQEQXgplKz7I4pSzAAAAAElFTkSuQmCC">
       </li>
     </ul>
 
@@ -48,8 +48,11 @@
         <option value="fahrenheit">Fahrenheit</option>
       </select>
     </div>
-    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://feedback.hootsuite.com/discussions">Feedback</a></li>
-    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://github.com/">Developer</a></li>
+    <li class="hs_dropdownMenuListItem"><a onclick="removeAllLocations()">Remove All Locations</a></li>
+    <li class="hs_dropdownMenuListItem"><a onclick="populateWeatherDiv()">Refresh Results</a></li>
+    <hr/>
+<!--    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://feedback.hootsuite.com/discussions">Feedback</a></li>-->
+    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://github.com/kx-chen">Developer</a></li>
   </ul>
 </div>
 <div>
@@ -59,12 +62,13 @@
       <label for="location">New location</label>
       <input class="form-control" name="location" id="location" placeholder="Add a location..." autocomplete="off">
     </div>
+    <a class="btn btn-primary" role="button" onclick="addLocation()" data-toggle="tooltip" title="Add Location">Add Location</a>
   </form>
-  <button type="button" class="btn btn-primary" onclick="removeAllLocations()">Clear all</button>
-  <button type="button" class="btn btn-primary" onclick="populateWeatherDiv()">Refresh</button>
+<!--  <button data-toggle="tooltip" type="button" class="btn btn-primary" onclick="removeAllLocations()" title="Clear All">Clear all</button>-->
+<!--  <button data-toggle="tooltip" type="button" class="btn btn-primary" onclick="populateWeatherDiv()" title="Refresh">Refresh</button>-->
   <div id="alerts">
   </div>
-
+  <hr/>
   <div class="hs_messages" id="weather">
     <h3>You have no locations added</h3>
   </div>

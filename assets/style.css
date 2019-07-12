@@ -75,3 +75,11 @@ body {
 .hs_postBody {
     font-family: 'Robonto', sans-serif;
 }
+
+label {
+    font-size: 20px;
+}
+
+.btn {
+    color: white!important;
+}

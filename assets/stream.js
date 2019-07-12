@@ -1,9 +1,9 @@
 let weatherResults = [];
 let config = {
   "units": "C",
+  "weather_base_url": "",
 };
 
-// TODO: city/location pick name
 
 async function getSavedLocations() {
   return new Promise((resolve) => {
@@ -29,10 +29,11 @@ function displayError(error){
 
 async function addLocation() {
   let locationForm = document.getElementById('location');
+
   if (!locationForm.value) return;
   let res = await checkIfLocationValid(locationForm.value);
+
   if (!res) {
-    console.log('invalid');
     displayError({
       "message": "Location not found, please try again.",
     });
@@ -86,17 +87,6 @@ async function loadWeather(city) {
 
 async function parseWeatherJson(weatherJson, id) {
   return new Promise((resolve) => {
-    // if (weatherJson['message']) {
-    //   // return generic error text
-    //   resolve({
-    //     "id": id,
-    //     "name": 'City not found',
-    //     "temperature": 'Unknown',
-    //     "weather": 'Unknown',
-    //     "icon": '/assets/question.png',
-    //   });
-    // }
-
     resolve({
       "id": id,
       "temperature": weatherJson['main']['temp'] ||'',
@@ -121,7 +111,13 @@ function renderSingleWeatherDiv(weather, index) {
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">${weather['temperature']} Degrees | ${weather['weather']}</span>
-            <button class="remove_location close" type="button" data-dismiss="alert" aria-label="Close" onclick="removeLocation(${index});">X</button>
+            <button class="remove_location close" 
+                    type="button" 
+                    data-toggle="tooltip"
+                    title="Remove"
+                    data-dismiss="alert" 
+                    aria-label="Close"
+                    onclick="removeLocation(${index});">X</button>
           </p>
         </div>
       </div>
@@ -177,4 +173,5 @@ document.addEventListener('DOMContentLoaded', async function () {
   bindApiButtons();
 
   hsp.bind('refresh', () => populateWeatherDiv());
+  $('[data-toggle="tooltip"]').tooltip();
 });
