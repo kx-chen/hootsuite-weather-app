@@ -20,7 +20,7 @@
   <script src="../js/app.js"></script>
   <script src="../js/autocomplete.js"></script>
 
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans|Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900|Open+Sans|Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="../js/style.css">
 </head>
 <body style="background: white;">
@@ -44,12 +44,12 @@
     font-weight: bold;
     font-size: 1.5em;"><p>Display Settings</p></li>
     <hr/>
-    <div class="hs_sdkContainer">
+<!--    <div class="hs_sdkContainer">-->
 <!--      <select id="temperature_select">-->
 <!--        <option value="metric">Celsius</option>-->
 <!--        <option value="imperial">Fahrenheit</option>-->
 <!--      </select>-->
-    </div>
+<!--    </div>-->
     <li class="hs_dropdownMenuListItem"><a onclick="removeAllLocations()">Remove All Locations</a></li>
     <hr/>
 <!--    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://feedback.hootsuite.com/discussions">Feedback</a></li>-->
@@ -80,7 +80,9 @@
   </div>
   <hr/>
   <div class="hs_messages" id="weather">
-    <h3>You have no locations added</h3>
+    <div class="alert alert-info" role="alert">
+      You have no locations added.
+    </div>
   </div>
 
   <p id="last_updated">Last updated: never</p>

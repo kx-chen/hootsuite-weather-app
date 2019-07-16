@@ -54,7 +54,7 @@ body {
     margin-top: 40px;
 }
 
-.alert {
+#error-alert {
     margin-top: 30px;
 }
 
