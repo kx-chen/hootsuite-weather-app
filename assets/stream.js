@@ -1,9 +1,8 @@
 let weatherResults = [];
 let config = {
-  "units": "C",
+  "units": "metric",
   "weather_base_url": "",
 };
-
 
 async function getSavedLocations() {
   return new Promise((resolve) => {
@@ -28,10 +27,14 @@ function displayError(error){
 }
 
 async function addLocation() {
-  let locationForm = document.getElementById('location');
+  let locationForm = document.getElementById('autocomplete');
+  let otherResult = await getLatLng(locationForm.value);
 
   if (!locationForm.value) return;
-  let res = await checkIfLocationValid(locationForm.value);
+  let res = await checkIfLocationValid({
+    "lat": otherResult.lat,
+    "lng": otherResult.lng,
+  });
 
   if (!res) {
     displayError({
@@ -44,7 +47,10 @@ async function addLocation() {
   if (!locations) {
     locations = [];
   }
-  locations.push(locationForm.value);
+  locations.push({
+    "lat": otherResult.lat,
+    "lng": otherResult.lng,
+  });
 
   hsp.saveData(locations, () => {
     populateWeatherDiv();
@@ -75,10 +81,9 @@ async function removeAllLocations() {
   });
 }
 
-async function loadWeather(city) {
+async function loadWeather(coords) {
   // TODO: don't push api key
-  let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}
-               &appid=6cfd34fc94e03afb78bee39afd8989bb&units=metric`);
+  let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lng}&appid=6cfd34fc94e03afb78bee39afd8989bb&units=${config.units}`);
   if (weatherJson.status === 200) {
     return await weatherJson.json();
   }
@@ -152,8 +157,8 @@ async function populateWeatherDiv() {
 
     for(let i = 0; i < locations.length; i++) {
       let weatherJson = await loadWeather(locations[i]);
-      let weather = await parseWeatherJson(weatherJson, i);
-      if (weather) {
+      if (weatherJson) {
+        let weather = await parseWeatherJson(weatherJson, i);
         weatherResults.push(weather);
         renderSingleWeatherDiv(weather, i);
       }
@@ -164,6 +169,79 @@ async function populateWeatherDiv() {
   }
 }
 
+var placeSearch, autocomplete;
+
+var componentForm = {
+  street_number: 'short_name',
+  route: 'long_name',
+  locality: 'long_name',
+  administrative_area_level_1: 'short_name',
+  country: 'long_name',
+  postal_code: 'short_name'
+};
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search predictions to
+  // geographical location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById('autocomplete'), {types: ['(cities)']});
+
+  // Avoid paying for data that you don't need by restricting the set of
+  // place fields that are returned to just the address components.
+  autocomplete.setFields(['address_component']);
+
+  // When the user selects an address from the drop-down, populate the
+  // address fields in the form.
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+function geolocate() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle(
+          {center: geolocation, radius: position.coords.accuracy});
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
+}
+
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+
+  // Get each component of the address from the place details,
+  // and then fill-in the corresponding field on the form.
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (componentForm[addressType]) {
+      var val = place.address_components[i][componentForm[addressType]];
+      console.log(val);
+      if(val) recentAddress += val + " ";
+    }
+  }
+}
+
+async function getLatLng(address) {
+  return new Promise((resolve) => {
+    var geocode = new google.maps.Geocoder();
+    geocode.geocode({
+      "address": address,
+    }, (geocodeResult) => {
+      console.log(geocodeResult);
+        resolve({
+              "lat": geocodeResult[0].geometry.location.lat(),
+              "lng": geocodeResult[0].geometry.location.lng(),
+        });
+      }
+    )
+  });
+}
 
 document.addEventListener('DOMContentLoaded', async function () {
   hsp.init({useTheme: true});
