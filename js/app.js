@@ -67,7 +67,7 @@ function WeatherView(weatherModel) {
 
       <div class="hs_content">
         <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather/${this.weather.lat}/${this.weather.lng}', 
-        'Weather for ${this.weather.full_name}', 900, 500);" class="hs_userName" target="_blank">${this.weather.full_name}</a>
+        'Weather for ${this.weather.full_name}');" class="hs_userName" target="_blank">${this.weather.full_name}</a>
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
@@ -127,7 +127,6 @@ function WeatherController() {
     this.addLocation = async () => {
         let locationForm = document.getElementById('autocomplete');
         let cityToLookup = locationForm.value;
-        locationForm.value = '';
 
         let otherResult = await getLatLng(cityToLookup);
 
@@ -153,6 +152,7 @@ function WeatherController() {
             "lat": otherResult.lat,
             "lng": otherResult.lng,
         });
+        locationForm.value = '';
 
         hsp.saveData(locations, () => {
             this.init();

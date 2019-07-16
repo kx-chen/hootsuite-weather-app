@@ -32,26 +32,14 @@ function geolocate() {
     }
 }
 
-function fillInAddress() {
-    // Get the place details from the autocomplete object.
-    var place = autocomplete.getPlace();
-
-    // Get each component of the address from the place details,
-    // and then fill-in the corresponding field on the form.
-    for (var i = 0; i < place.address_components.length; i++) {
-        var addressType = place.address_components[i].types[0];
-        if (componentForm[addressType]) {
-            var val = place.address_components[i][componentForm[addressType]];
-            console.log(val);
-        }
-    }
-}
 
 async function getLatLng(address) {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
         var geocode = new google.maps.Geocoder();
+        let address2 = await fillInAddress();
+        console.log(address2);
         geocode.geocode({
-                "address": address,
+                "address": address2,
             }, (geocodeResult) => {
                 console.log(geocodeResult);
                 resolve({
@@ -60,5 +48,33 @@ async function getLatLng(address) {
                 });
             }
         )
+    });
+}
+
+
+async function fillInAddress() {
+    return new Promise((resolve) => {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        let address = "";
+
+        // Get each component of the address from the place details,
+        // and then fill-in the corresponding field on the form.
+        if(place.address_components) {
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (componentForm[addressType]) {
+                    var val = place.address_components[i][componentForm[addressType]];
+                    address += val + ", ";
+                }
+            }
+            resolve(address);
+        } else {
+            displayError({
+                "message": "Sorry, that location could not be found. Please select a location from the suggestions.",
+            })
+        }
+
+
     });
 }
