@@ -17,14 +17,14 @@ app.use(urlencodedParser);
 
 
 app.get('/stream', (req, res) => {
-	res.sendFile(__dirname + '/stream.html');
+	res.sendFile(__dirname + '/html/stream.html');
 });
 
 app.post('/stream', (req, res) => {
   res.send({"status": 200});
 });
 
-app.use('/assets', express.static('assets'));
+app.use('/js', express.static('js'));
 
 app.post('/webhooks', (req, res) => {
   console.log("Webhook content:\n\n%s", JSON.stringify(req.body));
@@ -41,7 +41,7 @@ app.post('/callbacks', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/html/index.html');
 });
 
 // All Hoosuite apps require HTTPS, so in order to host locally
