@@ -15,7 +15,7 @@ function initAutocomplete() {
 
     autocomplete.setFields(['address_component']);
 
-    autocomplete.addListener('place_changed', addLocation);
+    autocomplete.addListener('place_changed', weatherApp.addLocation);
 }
 
 function geolocate() {

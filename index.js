@@ -53,10 +53,10 @@ if (fs.existsSync('certs/server.crt') && fs.existsSync('certs/server.key')) {
   const privateKey = fs.readFileSync('certs/server.key').toString();
   const options = {key: privateKey, cert: certificate};
 
-  var server = https.createServer(options, app).listen(process.env.PORT || 5000);
+  let server = https.createServer(options, app).listen(process.env.PORT || 5000);
   console.log(`App listening on port ${process.env.PORT || 5000} using HTTPS`);
 } else {
-  var server = http.createServer(app).listen(process.env.PORT || 5000);
+  let server = http.createServer(app).listen(process.env.PORT || 5000);
   console.log(`App listening on port ${process.env.PORT || 5000}`);
 }
 
