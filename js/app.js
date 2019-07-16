@@ -66,7 +66,8 @@ function WeatherView(weatherModel) {
       </div>
 
       <div class="hs_content">
-        <a onclick="hsp.showCustomPopup('https://darksky.net/forecast/${this.weather.lat},${this.weather.lng})', 'Weather for ${this.weather.full_name}');" class="hs_userName" target="_blank">${this.weather.full_name}</a>
+        <a onclick="hsp.showCustomPopup('https://darksky.net/widget/default/${this.weather.lat},${this.weather.lng}/ca12/en.js?width=100%&height=350&title=Full Forecast&textColor=333333&bgColor=FFFFFF&transparency=false&skyColor=undefined&fontFamily=Default&customFont=&units=ca&htColor=333333&ltColor=C7C7C7&displaySum=yes&displayHeader=yes', 
+        'Weather for ${this.weather.full_name}', 900, 500);" class="hs_userName" target="_blank">${this.weather.full_name}</a>
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
