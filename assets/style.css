@@ -15,10 +15,6 @@
     flex: 0 1 auto;
 }
 
-.hs_messages {
-    overflow: scroll;
-}
-
 .hs_sdkContainer {
     display: flex;
     margin-bottom: 10px;
