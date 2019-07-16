@@ -1,5 +1,5 @@
 {
-  "name": "Hootsuite Weather App",
+  "name": "hs-weather-app",
   "version": "1.0.0",
   "description": "Hootsuite weather app",
   "main": "index.js",
