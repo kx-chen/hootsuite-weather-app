@@ -1,7 +1,7 @@
 {
-  "name": "best-sample",
+  "name": "Hootsuite Weather App",
   "version": "1.0.0",
-  "description": "a sample app backend in express",
+  "description": "Hootsuite weather app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.hootops.com:Platform/sdk-sample-app.git"
+    "url": "git@github.com:kx-chen/hs-weather-app.git"
   },
   "author": "",
   "license": "ISC",
