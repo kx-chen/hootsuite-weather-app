@@ -63,6 +63,8 @@ body {
 }
 
 .hs_userName {
+    color: #00aeef!important;
+    text-decoration: underline;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
     font-size: 1.3em!important;
