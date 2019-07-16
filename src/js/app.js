@@ -1,20 +1,7 @@
 let weatherApp;
-let config = {
+let settings = {
     "units": "metric",
-    "weather_base_url": "",
-    "more_info_url": "",
 };
-
-// TODO: DRY with objects that have lat/lng
-document.addEventListener('DOMContentLoaded', async function () {
-    hsp.init({useTheme: true});
-    init();
-    loadTopBars();
-    bindApiButtons();
-
-    hsp.bind('refresh', () => weatherApp.init());
-    $('[data-toggle="tooltip"]').tooltip();
-});
 
 
 function WeatherModel(lat, lng, weatherID, full_name) {
@@ -28,14 +15,14 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     this.full_name = full_name;
 
 
-    this.init = async () => {
+    this.refresh = async () => {
         this.weatherJson = await this.lookup();
         this.weatherResult = await this.parseWeatherResults();
     };
 
     this.lookup = async () => {
         // TODO: fix return types
-        let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.lng}&appid=6cfd34fc94e03afb78bee39afd8989bb&units=${config.units}`);
+        let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.lng}&appid=6cfd34fc94e03afb78bee39afd8989bb&units=${settings.units}`);
 
         if (weatherJson.status === 200) {
             return await weatherJson.json();
@@ -110,7 +97,7 @@ function WeatherController() {
                     let full_name = this.locations[i].full_name;
 
                     let model = new WeatherModel(lat, lng, i, full_name);
-                    await model.init();
+                    await model.refresh();
 
                     new WeatherView(model).render();
                     this.weatherModels.push(model);
@@ -185,3 +172,14 @@ function init() {
     weatherApp = new WeatherController();
     weatherApp.init();
 }
+
+
+document.addEventListener('DOMContentLoaded',  () => {
+    hsp.init({useTheme: true});
+    init();
+    loadTopBars();
+    bindApiButtons();
+
+    hsp.bind('refresh', () => weatherApp.refresh());
+    $('[data-toggle="tooltip"]').tooltip();
+});

@@ -63,7 +63,7 @@ function deleteDiv(id) {
 
 
 async function checkIfLocationValid(location){
-  let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=6cfd34fc94e03afb78bee39afd8989bb&units=${config.units}`);
+  let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lng}&appid=6cfd34fc94e03afb78bee39afd8989bb&units=${settings.units}`);
   if (weatherJson.status === 200) {
     return await weatherJson.json();
   }
