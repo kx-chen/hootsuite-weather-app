@@ -2,6 +2,7 @@ let weatherApp;
 let config = {
     "units": "metric",
     "weather_base_url": "",
+    "more_info_url": "",
 };
 
 
@@ -33,10 +34,7 @@ function WeatherModel(lat, lng, weatherID) {
 
     this.lookup = async () => {
         // TODO: fix return types
-        let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?
-        lat=${this.lat}
-        &lon=${this.lng}
-        &appid=6cfd34fc94e03afb78bee39afd8989bb&units=${config.units}`);
+        let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.lng}&appid=6cfd34fc94e03afb78bee39afd8989bb&units=${config.units}`);
 
         if (weatherJson.status === 200) {
             return await weatherJson.json();
@@ -67,7 +65,7 @@ function WeatherView(weatherModel) {
       </div>
 
       <div class="hs_content">
-        <p class="hs_userName">${this.weather.name}</p>
+        <a href="https://darksky.net/forecast/${this.weather.lat},${this.weather.lng}}" class="hs_userName" target="_blank">${this.weather.name}</a>
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
@@ -143,7 +141,7 @@ function WeatherController() {
             return;
         }
 
-        let locations = await getSavedLocations();
+        let locations = await this.getLocations();
         if (!locations) {
             locations = [];
         }
