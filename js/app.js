@@ -5,7 +5,7 @@ let config = {
     "more_info_url": "",
 };
 
-
+// TODO: DRY with objects that have lat/lng
 document.addEventListener('DOMContentLoaded', async function () {
     hsp.init({useTheme: true});
     init();
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 
-function WeatherModel(lat, lng, weatherID) {
+function WeatherModel(lat, lng, weatherID, full_name) {
     this.id = weatherID;
     this.temperature = '';
     this.name = '';
@@ -25,6 +25,7 @@ function WeatherModel(lat, lng, weatherID) {
     this.weather = '';
     this.lat = lat;
     this.lng = lng;
+    this.full_name = full_name;
 
 
     this.init = async () => {
@@ -65,7 +66,7 @@ function WeatherView(weatherModel) {
       </div>
 
       <div class="hs_content">
-        <a href="https://darksky.net/forecast/${this.weather.lat},${this.weather.lng}}" class="hs_userName" target="_blank">${this.weather.name}</a>
+        <a href="https://darksky.net/forecast/${this.weather.lat},${this.weather.lng}}" class="hs_userName" target="_blank">${this.weather.full_name}</a>
         <div class="hs_contentText">
           <p>
             <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
@@ -105,8 +106,9 @@ function WeatherController() {
                 if (this.locations[i]) {
                     let lat = this.locations[i].lat;
                     let lng = this.locations[i].lng;
+                    let full_name = this.locations[i].full_name;
 
-                    let model = new WeatherModel(lat, lng, i);
+                    let model = new WeatherModel(lat, lng, i, full_name);
                     await model.init();
 
                     new WeatherView(model).render();
@@ -146,6 +148,7 @@ function WeatherController() {
             locations = [];
         }
         locations.push({
+            "full_name": cityToLookup,
             "lat": otherResult.lat,
             "lng": otherResult.lng,
         });
@@ -167,6 +170,7 @@ function WeatherController() {
 
         this.weatherModels.forEach((result) => {
             locationsList.push({
+                "full_name": result.full_name,
                 "lat": result.lat,
                 "lng": result.lng,
             });
