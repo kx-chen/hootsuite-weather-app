@@ -14,14 +14,22 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
+app.set('view engine', 'ejs');
 
 
 app.get('/stream', (req, res) => {
-	res.sendFile(__dirname + '/html/stream.html');
+	res.sendFile(__dirname + '/views/stream.html');
 });
 
 app.post('/stream', (req, res) => {
-  res.sendFile(__dirname + '/html/stream.html');
+  res.sendFile(__dirname + '/views/stream.html');
+});
+
+app.get('/weather/:lat/:lng', (req, res) => {
+  res.render('widget.ejs', {
+    "lat": req.params.lat,
+    "lng": req.params.lng,
+  });
 });
 
 app.use('/js', express.static('js'));
