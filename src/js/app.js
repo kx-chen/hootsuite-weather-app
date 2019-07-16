@@ -116,12 +116,13 @@ function WeatherController() {
         let locationForm = document.getElementById('autocomplete');
         let cityToLookup = locationForm.value;
 
-        let otherResult = await getLatLng(cityToLookup);
+        let lookupGeometry = await getLatLng(cityToLookup);
 
         if (!cityToLookup) return;
+        // TODO: turn into object for easy compare
         let res = await checkIfLocationValid({
-            "lat": otherResult.lat,
-            "lng": otherResult.lng,
+            "lat": lookupGeometry.lat,
+            "lng": lookupGeometry.lng,
         });
 
         if (!res) {
@@ -135,10 +136,18 @@ function WeatherController() {
         if (!locations) {
             locations = [];
         }
+        for(let i = 0; i < locations.length; i++) {
+            if (locations[i].lat == lookupGeometry.lat && locations[i].lng == lookupGeometry.lng) {
+                displayError({
+                    "message": "Location already exists"
+                });
+                return;
+            }
+        }
         locations.push({
             "full_name": cityToLookup,
-            "lat": otherResult.lat,
-            "lng": otherResult.lng,
+            "lat": lookupGeometry.lat,
+            "lng": lookupGeometry.lng,
         });
         locationForm.value = '';
 

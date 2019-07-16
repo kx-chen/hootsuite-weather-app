@@ -56,9 +56,9 @@ app.get('/', (req, res) => {
 // you must have some certs. They don't need to be issued by a CA for development,
 // but for production they definitely do! Heroku adds its own TLS,
 // so you don't have to worry about it as long as TLS is enabled on your Heroku app.
-if (fs.existsSync('certs/server.crt') && fs.existsSync('certs/server.key')) {
-  const certificate = fs.readFileSync('certs/server.crt').toString();
-  const privateKey = fs.readFileSync('certs/server.key').toString();
+if (fs.existsSync('certs/localhost.pem') && fs.existsSync('certs/localhost-key.pem')) {
+  const certificate = fs.readFileSync('certs/localhost.pem').toString();
+  const privateKey = fs.readFileSync('certs/localhost-key.pem').toString();
   const options = {key: privateKey, cert: certificate};
 
   let server = https.createServer(options, app).listen(process.env.PORT || 5000);
