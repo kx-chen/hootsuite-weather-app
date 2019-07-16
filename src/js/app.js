@@ -15,7 +15,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     this.full_name = full_name;
 
 
-    this.refresh = async () => {
+    this.init = async () => {
         this.weatherJson = await this.lookup();
         this.weatherResult = await this.parseWeatherResults();
     };
@@ -48,27 +48,28 @@ function WeatherView(weatherModel) {
 
         weatherDiv.insertAdjacentHTML('afterbegin',
             `<div class="hs_message" id="${this.weather.id}">
-      <div class="hs_avatar">
-        <img src="${this.weather.icon}" class="hs_avatarImage" alt="Avatar">
-      </div>
-
-      <div class="hs_content">
-        <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather/${this.weather.lat}/${this.weather.lng}', 
-        'Weather for ${this.weather.full_name}');" class="hs_userName" target="_blank">${this.weather.full_name}</a>
-        <div class="hs_contentText">
-          <p>
-            <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
-            <button class="remove_location close" 
-                    type="button" 
-                    data-toggle="tooltip"
-                    title="Remove"
-                    data-dismiss="alert" 
-                    aria-label="Close"
-                    onclick="weatherApp.removeLocation(${this.weather.id});">X</button>
-          </p>
-        </div>
-      </div>
-    </div>`);
+                  <div class="hs_avatar">
+                    <img src="${this.weather.icon}" class="hs_avatarImage" alt="Avatar">
+                  </div>
+            
+                  <div class="hs_content">
+                    <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather/${this.weather.lat}/${this.weather.lng}', 
+                    'Weather for ${this.weather.full_name}');" class="hs_userName" target="_blank">${this.weather.full_name}</a>
+                    
+                    <div class="hs_contentText">
+                      <p>
+                        <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
+                        <button class="remove_location close" 
+                                type="button" 
+                                data-toggle="tooltip"
+                                title="Remove"
+                                data-dismiss="alert" 
+                                aria-label="Close"
+                                onclick="weatherApp.removeLocation(${this.weather.id});">X</button>
+                      </p>
+                    </div>
+                  </div>
+                </div>`);
     };
 }
 
@@ -83,7 +84,7 @@ function WeatherController() {
         }).catch((err) => console.log(err));
     };
 
-    this.init = async () => {
+    this.refresh = async () => {
         this.locations = await this.getLocations();
         this.weatherModels = [];
 
@@ -97,7 +98,7 @@ function WeatherController() {
                     let full_name = this.locations[i].full_name;
 
                     let model = new WeatherModel(lat, lng, i, full_name);
-                    await model.refresh();
+                    await model.init();
 
                     new WeatherView(model).render();
                     this.weatherModels.push(model);
@@ -142,7 +143,7 @@ function WeatherController() {
         locationForm.value = '';
 
         hsp.saveData(locations, () => {
-            this.init();
+            this.refresh();
         });
     };
 
@@ -170,7 +171,7 @@ function WeatherController() {
 
 function init() {
     weatherApp = new WeatherController();
-    weatherApp.init();
+    weatherApp.refresh();
 }
 
 
