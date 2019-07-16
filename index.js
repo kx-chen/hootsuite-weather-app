@@ -21,7 +21,7 @@ app.get('/stream', (req, res) => {
 });
 
 app.post('/stream', (req, res) => {
-  res.send({"status": 200});
+  res.sendFile(__dirname + '/html/stream.html');
 });
 
 app.use('/js', express.static('js'));
