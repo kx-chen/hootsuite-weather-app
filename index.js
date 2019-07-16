@@ -32,7 +32,7 @@ app.get('/weather/:lat/:lng', (req, res) => {
   });
 });
 
-app.use('/js', express.static('js'));
+app.use('/src', express.static('src'));
 
 app.post('/webhooks', (req, res) => {
   console.log("Webhook content:\n\n%s", JSON.stringify(req.body));
