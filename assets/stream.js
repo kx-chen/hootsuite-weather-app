@@ -28,9 +28,12 @@ function displayError(error){
 
 async function addLocation() {
   let locationForm = document.getElementById('autocomplete');
-  let otherResult = await getLatLng(locationForm.value);
+  let cityToLookup = locationForm.value;
+  locationForm.value = '';
 
-  if (!locationForm.value) return;
+  let otherResult = await getLatLng(cityToLookup);
+
+  if (!cityToLookup) return;
   let res = await checkIfLocationValid({
     "lat": otherResult.lat,
     "lng": otherResult.lng,
@@ -54,7 +57,6 @@ async function addLocation() {
 
   hsp.saveData(locations, () => {
     populateWeatherDiv();
-    locationForm.value = '';
   });
 }
 
@@ -192,7 +194,7 @@ function initAutocomplete() {
 
   // When the user selects an address from the drop-down, populate the
   // address fields in the form.
-  autocomplete.addListener('place_changed', fillInAddress);
+  autocomplete.addListener('place_changed', addLocation);
 }
 
 // Bias the autocomplete object to the user's geographical location,
@@ -222,7 +224,6 @@ function fillInAddress() {
     if (componentForm[addressType]) {
       var val = place.address_components[i][componentForm[addressType]];
       console.log(val);
-      if(val) recentAddress += val + " ";
     }
   }
 }

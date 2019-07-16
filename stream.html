@@ -57,7 +57,7 @@
 </div>
 <div>
 <div class="container">
-  <form onsubmit="addLocation(); return false;">
+  <form onsubmit="return false;">
     <div class="form-group">
       <label for="autocomplete">New location</label>
       <input class="form-control"
@@ -68,7 +68,7 @@
              type="text"
              onFocus="geolocate()">
     </div>
-    <a class="btn btn-primary" role="button" onclick="addLocation()" data-toggle="tooltip" title="Add Location">Add Location</a>
+<!--    <a class="btn btn-primary" role="button" onclick="addLocation()" data-toggle="tooltip" title="Add Location">Add Location</a>-->
   </form>
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&libraries=places&callback=initAutocomplete"
