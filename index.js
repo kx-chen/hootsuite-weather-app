@@ -41,7 +41,7 @@ app.post('/callbacks', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/html/index.html');
+  res.redirect('/stream');
 });
 
 // All Hoosuite apps require HTTPS, so in order to host locally
