@@ -71,3 +71,11 @@ async function checkIfLocationValid(location){
 }
 
 
+async function removeAllLocations() {
+  hsp.saveData([], () => {
+    clearDivContents('weather');
+  });
+  document.getElementsByClassName('hs_topBarDropdown')[0].style.display = 'none';
+}
+
+
