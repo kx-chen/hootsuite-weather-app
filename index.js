@@ -16,10 +16,13 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 
 
-app.post('/stream', (req, res) => {
+app.get('/stream', (req, res) => {
 	res.sendFile(__dirname + '/stream.html');
 });
 
+app.post('/stream', (req, res) => {
+  res.send({"status": 200});
+});
 
 app.use('/assets', express.static('assets'));
 
@@ -51,10 +54,10 @@ if (fs.existsSync('certs/server.crt') && fs.existsSync('certs/server.key')) {
   const options = {key: privateKey, cert: certificate};
 
   var server = https.createServer(options, app).listen(process.env.PORT || 5000);
-  console.log(`Example app listening on port ${process.env.PORT || 5000} using HTTPS`);
+  console.log(`App listening on port ${process.env.PORT || 5000} using HTTPS`);
 } else {
   var server = http.createServer(app).listen(process.env.PORT || 5000);
-  console.log(`Example app listening on port ${process.env.PORT || 5000}`);
+  console.log(`App listening on port ${process.env.PORT || 5000}`);
 }
 
 const io = require('socket.io')(server);
