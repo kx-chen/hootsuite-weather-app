@@ -75,7 +75,13 @@
             <div id="weather-alerts">
             </div>
             <hr/>
-            <div class="hs_messages" id="weather">
+            <div id="loading">
+                <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                </svg>
+            </div>
+
+            <div class="hs_messages" id="weather" style="display: none">
                 <div class="alert alert-info" role="alert">
                     You have no locations added.
                 </div>

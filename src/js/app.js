@@ -38,6 +38,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
         displayError({
             "message": "Sorry! Something went wrong."
         }, false);
+        document.getElementById('loading').style.display = 'none';
         return false;
     };
 
@@ -108,6 +109,8 @@ function WeatherController() {
         this.locations = await this.getLocations();
         this.weatherModels = [];
 
+        document.getElementById('weather').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
         if (this.locations) {
             clearDivContents('weather');
 
@@ -126,6 +129,8 @@ function WeatherController() {
             }
             this.updateLastUpdated();
         }
+        document.getElementById('weather').style.display = 'block';
+        document.getElementById('loading').style.display = 'none';
     };
 
     this.updateLastUpdated = () => {
@@ -158,7 +163,9 @@ function WeatherController() {
             locations = [];
         }
         for(let i = 0; i < locations.length; i++) {
-            if (locations[i].lat === lookupGeometry.lat && locations[i].lng === lookupGeometry.lng) {
+            let latInt = parseFloat(locations[i].lat);
+            let lngInt = parseFloat(locations[i].lng);
+            if (latInt === lookupGeometry.lat && lngInt === lookupGeometry.lng) {
                 displayError({
                     "message": "Location already exists"
                 });
