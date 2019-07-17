@@ -45,6 +45,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
         this.temperature = Math.round(this.weatherJson['currently']['temperature']);
         this.weather = this.weatherJson['currently']['summary'];
         this.icon = `https://darksky.net/images/weather-icons/${this.weatherJson['currently']['icon']}.png`;
+        if(this.weatherJson['alerts']) this.alerts = this.weatherJson['alerts'];
     };
 }
 
@@ -79,6 +80,15 @@ function WeatherView(weatherModel) {
                     </div>
                   </div>
                 </div>`);
+        if(this.weather['alerts']) {
+            document.getElementById(this.weather.id).insertAdjacentHTML('beforeend',
+                `<div class="alert alert-info fade show" role="alert">
+<!--                           <h5><strong>${this.weather.full_name}:</strong></h5>-->
+                            <p>${this.weather['alerts'][0]['title']}</p>
+                           <a href="${this.weather['alerts'][0]['uri']}" target="_blank">Read More</a>
+                       </div>
+            `)
+        }
     };
 }
 
