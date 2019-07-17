@@ -18,38 +18,38 @@ app.set('view engine', 'ejs');
 
 
 app.get('/stream', (req, res) => {
-	res.sendFile(__dirname + '/views/stream.html');
+    res.sendFile(__dirname + '/views/stream.html');
 });
 
 app.post('/stream', (req, res) => {
-  res.sendFile(__dirname + '/views/stream.html');
+    res.sendFile(__dirname + '/views/stream.html');
 });
 
 app.get('/weather/:lat/:lng', (req, res) => {
-  res.render('widget.ejs', {
-    "lat": req.params.lat,
-    "lng": req.params.lng,
-  });
+    res.render('widget.ejs', {
+        "lat": req.params.lat,
+        "lng": req.params.lng,
+    });
 });
 
 app.use('/src', express.static('src'));
 
 app.post('/webhooks', (req, res) => {
-  console.log("Webhook content:\n\n%s", JSON.stringify(req.body));
-  res.status(200).end();
+    console.log("Webhook content:\n\n%s", JSON.stringify(req.body));
+    res.status(200).end();
 });
 
 //used for webhooks with urlencoded payloads
 app.post('/callbacks', (req, res) => {
-  console.log("Callback content");
-  console.log(req.body);
+    console.log("Callback content");
+    console.log(req.body);
 
-  res.status(200).send('{"success":true}').end();
+    res.status(200).send('{"success":true}').end();
 });
 
 
 app.get('/', (req, res) => {
-  res.redirect('/stream');
+    res.redirect('/stream');
 });
 
 // All Hoosuite apps require HTTPS, so in order to host locally
@@ -57,14 +57,14 @@ app.get('/', (req, res) => {
 // but for production they definitely do! Heroku adds its own TLS,
 // so you don't have to worry about it as long as TLS is enabled on your Heroku app.
 if (fs.existsSync('certs/localhost.pem') && fs.existsSync('certs/localhost-key.pem')) {
-  const certificate = fs.readFileSync('certs/localhost.pem').toString();
-  const privateKey = fs.readFileSync('certs/localhost-key.pem').toString();
-  const options = {key: privateKey, cert: certificate};
+    const certificate = fs.readFileSync('certs/localhost.pem').toString();
+    const privateKey = fs.readFileSync('certs/localhost-key.pem').toString();
+    const options = {key: privateKey, cert: certificate};
 
-  let server = https.createServer(options, app).listen(process.env.PORT || 5000);
-  console.log(`App listening on port ${process.env.PORT || 5000} using HTTPS`);
+    let server = https.createServer(options, app).listen(process.env.PORT || 5000);
+    console.log(`App listening on port ${process.env.PORT || 5000} using HTTPS`);
 } else {
-  let server = http.createServer(app).listen(process.env.PORT || 5000);
-  console.log(`App listening on port ${process.env.PORT || 5000}`);
+    let server = http.createServer(app).listen(process.env.PORT || 5000);
+    console.log(`App listening on port ${process.env.PORT || 5000}`);
 }
 

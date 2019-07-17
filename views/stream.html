@@ -1,85 +1,85 @@
 <!DOCTYPE>
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Weather</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Weather</title>
 
-  <script src="https://assets.hootsuite.com/jsapi/4-0/hsp.js"></script>
+        <script src="https://assets.hootsuite.com/jsapi/4-0/hsp.js"></script>
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-  <script src="../src/js/util.js"></script>
-  <script src="../src/js/menus.js"></script>
+        <script src="../src/js/util.js"></script>
+        <script src="../src/js/menus.js"></script>
 
-  <script src="../src/js/app.js"></script>
-  <script src="../src/js/autocomplete.js"></script>
+        <script src="../src/js/app.js"></script>
+        <script src="../src/js/autocomplete.js"></script>
 
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900|Open+Sans|Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="../src/styles/style.css">
-</head>
-<body style="background: white;">
-<div class="hs_topBar">
-  <div class="hs_topBarContent">
-    <!--Right-Side Controls-->
-    <ul class="hs_topBarControls">
-      <li class="hs_topBarControlsBtn hs_sdkBtn" data-dropdown="sdk" title="More">
-        <img data-toggle="tooltip" title="Settings" height="26" style="margin-top: -3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAHlBMVEVMaXGIi4+Ah4yCh4yDiI2BhoyBh4yBh4yAh4yAhouZAMq8AAAACXRSTlMAG8FYOd+D86AAMG8OAAABF0lEQVRYw+1X2RKDIAw0gXD8/w+3djwiFQ3DtuMD+yqsIceyTNPAwMADkPKG1EWUFaiDx2si30HkNJHrIAqaKGBy3Zdt1kTcuJlSWOvjoiaKa5IoJDJGwfMef4hnhsyFc2yLbimUhJBPkIJYSyjZBGkq+BVumoGilSiSvXGukcyzdQdvbcClDd37DOTOvrQEJNtvvTSEROViVhmlMii5SHex+Li0+A2TvY/8xclvRUUNKtdrEQ0qt/ekqwpmNMmuVNWezJP2wRZR/VKJ/yVCHc2Dko0qP6ghUSMCG1qYjMCEDSe1MPHHXUewCxJ3Ze8m4jRdwW4ilK35Co5bbA3OaMGs30/MKMwewww77AlBmugZz6yBgQEQXgplKz7I4pSzAAAAAElFTkSuQmCC">
-      </li>
-    </ul>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900|Open+Sans|Roboto&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="../src/styles/style.css">
+    </head>
+    <body style="background: white;">
+        <div class="hs_topBar">
+            <div class="hs_topBarContent">
+                <!--Right-Side Controls-->
+                <ul class="hs_topBarControls">
+                    <li class="hs_topBarControlsBtn hs_sdkBtn" data-dropdown="sdk" title="More">
+                        <img data-toggle="tooltip" title="Settings" height="26" style="margin-top: -3px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAHlBMVEVMaXGIi4+Ah4yCh4yDiI2BhoyBh4yBh4yAh4yAhouZAMq8AAAACXRSTlMAG8FYOd+D86AAMG8OAAABF0lEQVRYw+1X2RKDIAw0gXD8/w+3djwiFQ3DtuMD+yqsIceyTNPAwMADkPKG1EWUFaiDx2si30HkNJHrIAqaKGBy3Zdt1kTcuJlSWOvjoiaKa5IoJDJGwfMef4hnhsyFc2yLbimUhJBPkIJYSyjZBGkq+BVumoGilSiSvXGukcyzdQdvbcClDd37DOTOvrQEJNtvvTSEROViVhmlMii5SHex+Li0+A2TvY/8xclvRUUNKtdrEQ0qt/ekqwpmNMmuVNWezJP2wRZR/VKJ/yVCHc2Dko0qP6ghUSMCG1qYjMCEDSe1MPHHXUewCxJ3Ze8m4jRdwW4ilK35Co5bbA3OaMGs30/MKMwewww77AlBmugZz6yBgQEQXgplKz7I4pSzAAAAAElFTkSuQmCC">
+                    </li>
+                </ul>
 
-    <!--Left-Side Title-->
-    <h1 class="hs_topBarTitle"></h1>
-  </div>
+                <!--Left-Side Title-->
+                <h1 class="hs_topBarTitle"></h1>
+            </div>
 
-  <!--Menu List-->
+            <!--Menu List-->
 
-  <ul class="hs_topBarDropdown hs_sdkDropdown hs_dropdownMenuList" data-dropdown="sdk" style="display: none;">
-    <li class="hs_dropdownMenuListItem" style="    padding-left: 10px;
-    font-weight: bold;
-    font-size: 1.5em;"><p>Settings</p></li>
-    <hr/>
-<!--    <div class="hs_sdkContainer">-->
-<!--      <select id="temperature_select">-->
-<!--        <option value="metric">Celsius</option>-->
-<!--        <option value="imperial">Fahrenheit</option>-->
-<!--      </select>-->
-<!--    </div>-->
-    <li class="hs_dropdownMenuListItem"><a onclick="removeAllLocations()">Remove All Locations</a></li>
-    <hr/>
-    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://github.com/kx-chen">Developer</a></li>
-  </ul>
-</div>
+            <ul class="hs_topBarDropdown hs_sdkDropdown hs_dropdownMenuList" data-dropdown="sdk" style="display: none;">
+                <li class="hs_dropdownMenuListItem" style="    padding-left: 10px;
+            font-weight: bold;
+            font-size: 1.5em;"><p>Settings</p></li>
+                <hr/>
+                <!--    <div class="hs_sdkContainer">-->
+                <!--      <select id="temperature_select">-->
+                <!--        <option value="metric">Celsius</option>-->
+                <!--        <option value="imperial">Fahrenheit</option>-->
+                <!--      </select>-->
+                <!--    </div>-->
+                <li class="hs_dropdownMenuListItem"><a onclick="removeAllLocations()">Remove All Locations</a></li>
+                <hr/>
+                <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://github.com/kx-chen">Developer</a></li>
+            </ul>
+        </div>
 
-<div class="container">
-  <form onsubmit="return false;">
-    <div class="form-group">
-      <label for="autocomplete">New location</label>
-      <input class="form-control"
-             name="location"
-             id="autocomplete"
-             placeholder="Add a location..."
-             autocomplete="off"
-             type="text"
-             onFocus="geolocate()">
-    </div>
-  </form>
+        <div class="container">
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label for="autocomplete">New location</label>
+                    <input class="form-control"
+                           name="location"
+                           id="autocomplete"
+                           placeholder="Add a location..."
+                           autocomplete="off"
+                           type="text"
+                           onFocus="geolocate()">
+                </div>
+            </form>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&libraries=places&callback=initAutocomplete"
-          async defer></script>
-  <div id="alerts">
-  </div>
-  <hr/>
-  <div class="hs_messages" id="weather">
-    <div class="alert alert-info" role="alert">
-      You have no locations added.
-    </div>
-  </div>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&libraries=places&callback=initAutocomplete"
+                    async defer></script>
+            <div id="alerts">
+            </div>
+            <hr/>
+            <div class="hs_messages" id="weather">
+                <div class="alert alert-info" role="alert">
+                    You have no locations added.
+                </div>
+            </div>
 
-  <p id="last_updated">Last updated: never</p>
-</div>
-</body>
+            <p id="last_updated">Last updated: never</p>
+        </div>
+    </body>
 </html>

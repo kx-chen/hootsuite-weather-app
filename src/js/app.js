@@ -49,19 +49,19 @@ function WeatherView(weatherModel) {
                   <div class="hs_avatar">
                     <img src="${this.weather.icon}" class="hs_avatarImage" alt="Avatar">
                   </div>
-            
+
                   <div class="hs_content">
-                    <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather/${this.weather.lat}/${this.weather.lng}', 
+                    <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather/${this.weather.lat}/${this.weather.lng}',
                     'Weather for ${this.weather.full_name}');" class="hs_userName" target="_blank">${this.weather.full_name}</a>
-                    
+
                     <div class="hs_contentText">
                       <p>
                         <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
-                        <button class="remove_location close" 
-                                type="button" 
+                        <button class="remove_location close"
+                                type="button"
                                 data-toggle="tooltip"
                                 title="Remove"
-                                data-dismiss="alert" 
+                                data-dismiss="alert"
                                 aria-label="Close"
                                 onclick="weatherApp.removeLocation(${this.weather.id});">X</button>
                       </p>
