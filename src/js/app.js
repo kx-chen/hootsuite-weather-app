@@ -21,19 +21,30 @@ function WeatherModel(lat, lng, weatherID, full_name) {
 
     this.lookup = async () => {
         // TODO: fix return types
-        let weatherJson = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.lng}&appid=6cfd34fc94e03afb78bee39afd8989bb&units=${settings.units}`);
+        let weatherJson = await fetch(`https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/fd54318453b002e6ef5e89e7fa7d7f65/${this.lat},${this.lng}?units=ca`, {
+            "headers": new Headers({
+                "origin": window.location,
+            })
+        }).catch(() =>{
+            displayError({
+                "message": "Sorry! Something went wrong."
+            }, false);
+        });
 
         if (weatherJson.status === 200) {
             return await weatherJson.json();
         }
+
+        displayError({
+            "message": "Sorry! Something went wrong."
+        }, false);
         return false;
     };
 
     this.parseWeatherResults = async () => {
-        this.temperature = this.weatherJson['main']['temp'];
-        this.weather = this.weatherJson['weather'][0]['main'];
-        this.name = this.weatherJson['name'];
-        this.icon = `http://openweathermap.org/img/wn/${this.weatherJson['weather'][0]['icon']}@2x.png`;
+        this.temperature = Math.round(this.weatherJson['currently']['temperature']);
+        this.weather = this.weatherJson['currently']['summary'];
+        this.icon = `https://darksky.net/images/weather-icons/${this.weatherJson['currently']['icon']}.png`;
     };
 }
 

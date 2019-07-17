@@ -1,4 +1,4 @@
-function displayError(error){
+function displayError(error, timeout){
     document.getElementById('alerts').innerHTML = `
     <div class="alert alert-danger fade show" id="error-alert" role="alert">
    ${error.message}
@@ -7,9 +7,11 @@ function displayError(error){
     </button>
   </div>`;
 
-    setTimeout(() => {
-        document.getElementById('alerts').innerHTML = '';
-    }, 3000);
+    if(timeout) {
+        setTimeout(() => {
+            document.getElementById('alerts').innerHTML = '';
+        }, 3000);
+    }
 }
 
 
