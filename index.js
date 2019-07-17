@@ -33,6 +33,7 @@ app.get('/weather/:lat/:lng', (req, res) => {
 });
 
 app.use('/src', express.static('src'));
+app.use('/images', express.static('images'));
 
 app.post('/webhooks', (req, res) => {
     console.log("Webhook content:\n\n%s", JSON.stringify(req.body));

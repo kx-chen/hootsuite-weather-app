@@ -70,13 +70,8 @@ function WeatherView(weatherModel) {
                     <div class="hs_contentText">
                       <p>
                         <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
-                        <button class="remove_location close"
-                                type="button"
-                                data-toggle="tooltip"
-                                title="Remove"
-                                data-dismiss="alert"
-                                aria-label="Close"
-                                onclick="weatherApp.removeLocation(${this.weather.id});">X</button>
+                        <span class="remove_location close icon-app-dir x-clear"
+                                onclick="weatherApp.removeLocation(${this.weather.id});"></span>
                       </p>
                     </div>
                   </div>
@@ -134,6 +129,7 @@ function WeatherController() {
         }
         document.getElementById('weather').style.display = 'block';
         document.getElementById('loading').style.display = 'none';
+        $('[data-toggle="tooltip"]').tooltip();
     };
 
     this.updateLastUpdated = () => {

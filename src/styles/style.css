@@ -181,3 +181,7 @@ label {
         transform: rotate(450deg);
     }
 }
+
+.tooltip, .remove-location {
+    pointer-events: none;
+}
