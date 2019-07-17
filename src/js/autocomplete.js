@@ -41,7 +41,6 @@ function getLatLng(address) {
         geocode.geocode({
                 "address": address,
             }, (geocodeResult) => {
-                console.log(geocodeResult);
                 resolve({
                     "lat": geocodeResult[0].geometry.location.lat(),
                     "lng": geocodeResult[0].geometry.location.lng(),
