@@ -44,4 +44,6 @@ function removeAllLocations() {
         clearDivContents('weather');
     });
     document.getElementsByClassName('hs_topBarDropdown')[0].style.display = 'none';
+    document.getElementById('no-locations').style.display = 'block';
+    document.getElementById('last_updated').innerHTML = 'Last updated: never';
 }

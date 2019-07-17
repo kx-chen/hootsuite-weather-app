@@ -109,6 +109,9 @@ function WeatherController() {
         this.locations = await this.getLocations();
         this.weatherModels = [];
 
+        if(this.locations.length > 0) {
+            document.getElementById('no-locations').style.display = 'none';
+        }
         document.getElementById('weather').style.display = 'none';
         document.getElementById('loading').style.display = 'block';
         if (this.locations) {
@@ -159,16 +162,16 @@ function WeatherController() {
         }
 
         let locations = await this.getLocations();
+        if (!locations) {
+            locations = [];
+        }
+
         // TODO: extract into a constant
         if (locations.length >= 10) {
             displayError({
                 "message": "Sorry, you can't have more than 10 locations!"
             }, true);
             return;
-        }
-        // TODO: what is this for
-        if (!locations) {
-            locations = [];
         }
         for(let i = 0; i < locations.length; i++) {
             let latInt = parseFloat(locations[i].lat);
@@ -186,6 +189,10 @@ function WeatherController() {
             "lng": lookupGeometry.lng,
         });
         locationForm.value = '';
+
+        if(locations.length > 0) {
+            document.getElementById('no-locations').style.display = 'none';
+        }
 
         hsp.saveData(locations, () => {
             this.refresh();
@@ -208,6 +215,11 @@ function WeatherController() {
                 "lng": result.lng,
             });
         });
+
+        if(locationsList.length === 0) {
+            document.getElementById('no-locations').style.display = 'block';
+            document.getElementById('last_updated').innerHTML = 'Last updated: never';
+        }
 
         hsp.saveData(locationsList);
     };
