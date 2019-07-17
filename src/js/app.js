@@ -114,10 +114,11 @@ function WeatherController() {
     this.addLocation = async () => {
         let locationForm = document.getElementById('autocomplete');
         let cityToLookup = locationForm.value;
-
-        let lookupGeometry = await getLatLng(cityToLookup);
-
         if (!cityToLookup) return;
+
+        let address = await getAutocompleteAddress();
+        let lookupGeometry = await getLatLng(address);
+
         // TODO: turn into object for easy compare
         let res = await checkIfLocationValid({
             "lat": lookupGeometry.lat,

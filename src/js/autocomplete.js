@@ -35,13 +35,11 @@ function geolocate() {
 }
 
 
-async function getLatLng(address) {
-    return new Promise(async (resolve) => {
+function getLatLng(address) {
+    return new Promise((resolve) => {
         let geocode = new google.maps.Geocoder();
-        let address2 = await fillInAddress();
-        console.log(address2);
         geocode.geocode({
-                "address": address2,
+                "address": address,
             }, (geocodeResult) => {
                 console.log(geocodeResult);
                 resolve({
@@ -54,7 +52,7 @@ async function getLatLng(address) {
 }
 
 
-async function fillInAddress() {
+function getAutocompleteAddress() {
     return new Promise((resolve) => {
         let place = autocomplete.getPlace();
         let address = "";
