@@ -159,6 +159,14 @@ function WeatherController() {
         }
 
         let locations = await this.getLocations();
+        // TODO: extract into a constant
+        if (locations.length >= 10) {
+            displayError({
+                "message": "Sorry, you can't have more than 10 locations!"
+            }, true);
+            return;
+        }
+        // TODO: what is this for
         if (!locations) {
             locations = [];
         }
