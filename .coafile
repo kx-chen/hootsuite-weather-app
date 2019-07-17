@@ -1,0 +1,5 @@
+[all]
+bears = SpaceConsistencyBear, ESLintBear
+eslint_config = .eslintrc.yml
+files = src/js/*.js, views/
+use_spaces = True
