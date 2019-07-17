@@ -1,14 +1,3 @@
-function bindApiButtons() {
-    // getSingleElementByClassName('hs_showImagePreview').addEventListener('click', function () {
-    //     hsp.showImagePreview(getSingleElementByClassName('hs_showImagePreviewInput').value, 'https://hootsuite.com');
-    // });
-    //
-    // getSingleElementByClassName('hs_showLightbox').addEventListener('click', function () {
-    //     // similar to showImagePreview
-    //     hsp.showLightbox(getSingleElementByClassName('hs_showLightboxInput').value);
-    // });
-}
-
 function loadTopBars() {
     var topBarControls = document.getElementsByClassName('hs_topBarControlsBtn');
 
@@ -42,5 +31,4 @@ function loadTopBars() {
 
 function bindTemperatureSelect() {
     let temperatureSelect = document.getElementById('temperature_select');
-
 }

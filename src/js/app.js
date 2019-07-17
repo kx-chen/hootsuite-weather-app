@@ -14,7 +14,6 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     this.lng = lng;
     this.full_name = full_name;
 
-
     this.init = async () => {
         this.weatherJson = await this.lookup();
         this.weatherResult = await this.parseWeatherResults();
@@ -39,13 +38,12 @@ function WeatherModel(lat, lng, weatherID, full_name) {
 }
 
 
-
 function WeatherView(weatherModel) {
     this.weather = weatherModel;
 
     this.render = () => {
         let weatherDiv = document.getElementById('weather');
-
+        // TODO: Event listener
         weatherDiv.insertAdjacentHTML('afterbegin',
             `<div class="hs_message" id="${this.weather.id}">
                   <div class="hs_avatar">
@@ -72,6 +70,7 @@ function WeatherView(weatherModel) {
                 </div>`);
     };
 }
+
 
 function WeatherController() {
     this.weatherModels = [];
@@ -137,7 +136,7 @@ function WeatherController() {
             locations = [];
         }
         for(let i = 0; i < locations.length; i++) {
-            if (locations[i].lat == lookupGeometry.lat && locations[i].lng == lookupGeometry.lng) {
+            if (locations[i].lat === lookupGeometry.lat && locations[i].lng === lookupGeometry.lng) {
                 displayError({
                     "message": "Location already exists"
                 });
@@ -155,7 +154,6 @@ function WeatherController() {
             this.refresh();
         });
     };
-
 
     this.removeLocation = async (index) => {
         deleteDiv(index);
@@ -188,7 +186,6 @@ document.addEventListener('DOMContentLoaded',  () => {
     hsp.init({useTheme: true});
     init();
     loadTopBars();
-    bindApiButtons();
 
     hsp.bind('refresh', () => weatherApp.refresh());
     $('[data-toggle="tooltip"]').tooltip();

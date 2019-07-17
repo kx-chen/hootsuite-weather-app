@@ -50,11 +50,10 @@
 <!--    </div>-->
     <li class="hs_dropdownMenuListItem"><a onclick="removeAllLocations()">Remove All Locations</a></li>
     <hr/>
-<!--    <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://feedback.hootsuite.com/discussions">Feedback</a></li>-->
     <li class="hs_dropdownMenuListItem"><a target="_blank" href="https://github.com/kx-chen">Developer</a></li>
   </ul>
 </div>
-<div>
+
 <div class="container">
   <form onsubmit="return false;">
     <div class="form-group">
@@ -67,13 +66,10 @@
              type="text"
              onFocus="geolocate()">
     </div>
-<!--    <a class="btn btn-primary" role="button" onclick="addLocation()" data-toggle="tooltip" title="Add Location">Add Location</a>-->
   </form>
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCocZZTCz9pr5gtn5Yx69pG-h4zdwtMBU4&libraries=places&callback=initAutocomplete"
           async defer></script>
-<!--  <button data-toggle="tooltip" type="button" class="btn btn-primary" onclick="removeAllLocations()" title="Clear All">Clear all</button>-->
-<!--  <button data-toggle="tooltip" type="button" class="btn btn-primary" onclick="populateWeatherDiv()" title="Refresh">Refresh</button>-->
   <div id="alerts">
   </div>
   <hr/>
