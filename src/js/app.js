@@ -21,7 +21,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
 
     this.lookup = async () => {
         // TODO: fix return types
-        let weatherJson = await fetch(`https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/fd54318453b002e6ef5e89e7fa7d7f65/${this.lat},${this.lng}?units=ca`, {
+        let weatherJson = await fetch(`${window.origin}/weather/${this.lat}/${this.lng}/ca`, {
             "headers": new Headers({
                 "origin": window.location,
             })
@@ -29,6 +29,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
             displayError({
                 "message": "Sorry! Something went wrong."
             }, false);
+            document.getElementById('loading').style.display = 'none';
         });
 
         if (weatherJson.status === 200) {
@@ -64,7 +65,7 @@ function WeatherView(weatherModel) {
                   </div>
 
                   <div class="hs_content">
-                    <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather/${this.weather.lat}/${this.weather.lng}',
+                    <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather-widget/${this.weather.lat}/${this.weather.lng}',
                     'Weather for ${this.weather.full_name}');" class="hs_userName" target="_blank">${this.weather.full_name}</a>
 
                     <div class="hs_contentText">
@@ -239,3 +240,5 @@ document.addEventListener('DOMContentLoaded',  () => {
     hsp.bind('refresh', () => weatherApp.refresh());
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+// export { WeatherController, WeatherModel, WeatherView }

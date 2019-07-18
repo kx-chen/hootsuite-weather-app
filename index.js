@@ -1,9 +1,11 @@
 'use strict';
+// TODO: sort imports
 const express = require('express');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const fetch = require('node-fetch');
 
 const app = express();
 
@@ -25,12 +27,20 @@ app.post('/stream', (req, res) => {
     res.sendFile(__dirname + '/views/stream.html');
 });
 
-app.get('/weather/:lat/:lng', (req, res) => {
+app.get('/weather-widget/:lat/:lng', (req, res) => {
     res.render('widget.ejs', {
         "lat": req.params.lat,
         "lng": req.params.lng,
     });
 });
+
+app.get('/weather/:lat/:lng/:units', async (req, res) => {
+    let weatherJson = await fetch(
+        `https://api.darksky.net/forecast/fd54318453b002e6ef5e89e7fa7d7f65/${req.params.lat},${req.params.lng}?units=ca`);
+    weatherJson = await weatherJson.json();
+    res.send(weatherJson);
+});
+
 
 app.use('/src', express.static('src'));
 app.use('/images', express.static('images'));

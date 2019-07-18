@@ -4,7 +4,7 @@
   "description": "Hootsuite weather app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node index.js",
     "lint": "eslint src/js/*.js"
   },
@@ -19,12 +19,14 @@
     "ejs": "^2.6.2",
     "express": "^4.15.3",
     "js-sha512": "^0.4.0",
+    "node-fetch": "^2.6.0",
     "twit": "^2.2.9"
   },
   "engines": {
     "node": "8.2.1"
   },
   "devDependencies": {
-    "eslint": "^6.0.1"
+    "eslint": "^6.0.1",
+    "mocha": "^6.1.4"
   }
 }
