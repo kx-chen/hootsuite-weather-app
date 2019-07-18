@@ -13,6 +13,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     this.lat = lat;
     this.lng = lng;
     this.full_name = full_name;
+    this.alerts = [];
 
     this.init = async () => {
         this.weatherJson = await this.lookup();
@@ -57,7 +58,7 @@ function WeatherView(weatherModel) {
 
     this.render = () => {
         let weatherDiv = document.getElementById('weather');
-        // TODO: Event listener
+
         weatherDiv.insertAdjacentHTML('afterbegin',
             `<div class="hs_message" id="${this.weather.id}">
                   <div class="hs_avatar">
@@ -77,12 +78,12 @@ function WeatherView(weatherModel) {
                     </div>
                   </div>
                 </div>`);
-        if(this.weather['alerts']) {
+
+        if(this.weather['alerts'].length > 0) {
             document.getElementById(this.weather.id).insertAdjacentHTML('beforeend',
                 `<div class="alert alert-info fade show" role="alert">
-<!--                           <h5><strong>${this.weather.full_name}:</strong></h5>-->
-                            <p>${this.weather['alerts'][0]['title']}</p>
-                           <a href="${this.weather['alerts'][0]['uri']}" target="_blank">Read More</a>
+                            <p id="alert-title">${this.weather['alerts'][0]['title']}</p>
+                           <a id="alert-url" href="${this.weather['alerts'][0]['uri']}" target="_blank">Read More</a>
                        </div>
             `)
         }
@@ -232,13 +233,6 @@ function init() {
 }
 
 
-document.addEventListener('DOMContentLoaded',  () => {
-    hsp.init({useTheme: true});
-    init();
-    loadTopBars();
-
-    hsp.bind('refresh', () => weatherApp.refresh());
-    $('[data-toggle="tooltip"]').tooltip();
-});
-
-// export { WeatherController, WeatherModel, WeatherView }
+exports.WeatherController = WeatherController;
+exports.WeatherView = WeatherView;
+exports.WeatherModel = WeatherModel;
