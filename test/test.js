@@ -45,3 +45,28 @@ describe('WeatherView', () => {
       assert.equal(alertUrl, 'pigs.com');
    });
 });
+
+
+describe('WeatherController', () => {
+   it('adds new locations', () => {
+
+   });
+
+   it('deletes old locations', () => {
+
+   });
+});
+
+describe('WeatherModel', () => {
+   it('fetches location data', () => {
+
+   });
+
+   it('displays error on fail', () => {
+
+   });
+
+   it('parses weather json', () => {
+
+   });
+});
