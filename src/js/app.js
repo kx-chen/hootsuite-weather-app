@@ -95,7 +95,11 @@ function WeatherController() {
     this.getLocations = async () => {
         return new Promise((resolve) => {
             hsp.getData((data) => {
-                resolve(data);
+                if(data) {
+                    resolve(data);
+                } else {
+                    resolve([]);
+                }
             });
         }).catch((err) => console.log(err));
     };
@@ -109,7 +113,7 @@ function WeatherController() {
         }
         document.getElementById('weather').style.display = 'none';
         document.getElementById('loading').style.display = 'block';
-        if (this.locations) {
+        if (this.locations.length) {
             clearDivContents('weather');
 
             for (let i = 0; i < this.locations.length; i++) {
