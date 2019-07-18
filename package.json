@@ -4,7 +4,7 @@
   "description": "Hootsuite weather app",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "./node_modules/.bin/mocha",
     "start": "node index.js",
     "lint": "eslint src/js/*.js"
   },
@@ -19,7 +19,6 @@
     "ejs": "^2.6.2",
     "express": "^4.15.3",
     "js-sha512": "^0.4.0",
-    "jsdom-global": "^3.0.2",
     "node-fetch": "^2.6.0",
     "twit": "^2.2.9"
   },
@@ -30,6 +29,7 @@
     "eslint": "^6.0.1",
     "jsdom": "^15.1.1",
     "mocha": "^6.1.4",
-    "sinon": "^7.3.2"
+    "sinon": "^7.3.2",
+    "jsdom-global": "^3.0.2"
   }
 }
