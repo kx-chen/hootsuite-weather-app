@@ -2,7 +2,12 @@ let weatherApp;
 let settings = {
     "units": "metric",
 };
-
+const utils = require('./util.js');
+const autocomplete = require('./autocomplete.js');
+const constants = require('./constants.js');
+const menus = require('./menus.js');
+const index = require('./index.js');
+const { hsp } = require('./hsp.js');
 
 function WeatherModel(lat, lng, weatherID, full_name) {
     this.id = weatherID;
@@ -27,7 +32,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
                 "origin": window.location,
             })
         }).catch(() =>{
-            displayError({
+            utils.displayError({
                 "message": "Sorry! Something went wrong."
             }, false);
             document.getElementById('loading').style.display = 'none';
@@ -37,7 +42,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
             return await weatherJson.json();
         }
 
-        displayError({
+        utils.displayError({
             "message": "Sorry! Something went wrong."
         }, false);
         document.getElementById('loading').style.display = 'none';
@@ -116,10 +121,11 @@ function WeatherController() {
         document.getElementById('weather').style.display = 'none';
         document.getElementById('loading').style.display = 'block';
         if (this.locations.length) {
-            clearDivContents('weather');
+            utils.clearDivContents('weather');
 
             for (let i = 0; i < this.locations.length; i++) {
                 if (this.locations[i]) {
+                    //TODO: if
                     let lat = this.locations[i].lat;
                     let lng = this.locations[i].lng;
                     let full_name = this.locations[i].full_name;
@@ -142,22 +148,29 @@ function WeatherController() {
         document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`;
     };
 
-    this.addLocation = async () => {
-        let locationForm = document.getElementById('autocomplete');
-        let cityToLookup = locationForm.value;
-        if (!cityToLookup) return;
-
-        let address = await getAutocompleteAddress();
-        let lookupGeometry = await getLatLng(address);
-
-        // TODO: turn into object for easy compare
-        let res = await checkIfLocationValid({
+    this.getLocationToAdd = async () => {
+        let address = await autocomplete.getAutocompleteAddress();
+        let lookupGeometry = await autocomplete.getLatLng(address);
+        // TODO: rename
+        let res = await utils.checkIfLocationValid({
             "lat": lookupGeometry.lat,
             "lng": lookupGeometry.lng,
         });
 
-        if (!res) {
-            displayError({
+        if(res) {
+            return {
+                "geometry": lookupGeometry,
+                "address": address,
+            };
+        }
+        return false;
+    };
+
+    this.addLocation = async () => {
+        let lookupGeometry = await this.getLocationToAdd();
+
+        if (!lookupGeometry) {
+            utils.displayError({
                 "message": "Location not found, please try again.",
             });
             return;
@@ -170,7 +183,7 @@ function WeatherController() {
 
         // TODO: extract into a constant
         if (locations.length >= 10) {
-            displayError({
+            utils.displayError({
                 "message": "Sorry, you can't have more than 10 locations!"
             }, true);
             return;
@@ -179,18 +192,18 @@ function WeatherController() {
             let latInt = parseFloat(locations[i].lat);
             let lngInt = parseFloat(locations[i].lng);
             if (latInt === lookupGeometry.lat && lngInt === lookupGeometry.lng) {
-                displayError({
+                utils.displayError({
                     "message": "Location already exists"
                 });
                 return;
             }
         }
         locations.push({
-            "full_name": cityToLookup,
-            "lat": lookupGeometry.lat,
-            "lng": lookupGeometry.lng,
+            "full_name": lookupGeometry.address,
+            "lat": lookupGeometry.geometry.lat,
+            "lng": lookupGeometry.geometry.lng,
         });
-        locationForm.value = '';
+        // locationForm.value = '';
 
         if(locations.length > 0) {
             document.getElementById('no-locations').style.display = 'none';
@@ -202,7 +215,7 @@ function WeatherController() {
     };
 
     this.removeLocation = async (index) => {
-        deleteDiv(index);
+        utils.deleteDiv(index);
 
         let locationsList = [];
 
@@ -228,11 +241,12 @@ function WeatherController() {
 }
 
 function init() {
-    weatherApp = new WeatherController();
-    weatherApp.refresh();
+    global.weatherApp = new WeatherController();
+    global.weatherApp.refresh();
 }
 
 
 exports.WeatherController = WeatherController;
 exports.WeatherView = WeatherView;
 exports.WeatherModel = WeatherModel;
+exports.init = init;

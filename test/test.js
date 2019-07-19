@@ -1,12 +1,11 @@
 const assert = require('assert');
-const app = require('../src/js/app.js');
-
 const sinon = require('sinon');
+
+const { WeatherModel, WeatherController, WeatherView, } = require('../src/js/bundle.js');
 
 describe('WeatherView', () => {
    before(() => {
       document.body.innerHTML = '<div id="weather"></div>';
-      sinon.replace(document, 'getElementById', sinon.fake(document.getElementById));
    });
 
    after(() => {
@@ -14,19 +13,19 @@ describe('WeatherView', () => {
    });
 
    it('renders WeatherModels', () => {
-      let model = new app.WeatherModel(49, 123, 0, 'Vancouver');
+      let model = new WeatherModel(49, 123, 0, 'Vancouver');
       model.full_name = 'Vancouver';
       model.weather = 'Rainy';
       model.icon = 'rainy';
 
-      new app.WeatherView(model).render();
+      new WeatherView(model).render();
 
       let cityName = document.getElementsByClassName('hs_userName')[0].innerHTML;
       assert.equal(cityName, 'Vancouver');
    });
 
    it('renders alerts', () => {
-      let alertsModel = new app.WeatherModel(49, 123, 1, 'Bolly World');
+      let alertsModel = new WeatherModel(49, 123, 1, 'Bolly World');
       alertsModel.full_name = 'Bolly World';
       alertsModel.weather = 'Bolly';
       alertsModel.icon = 'weather-icon';
@@ -37,7 +36,7 @@ describe('WeatherView', () => {
          }
       ];
 
-      new app.WeatherView(alertsModel).render();
+      new WeatherView(alertsModel).render();
 
       let alertTitle = document.getElementById('alert-title').innerHTML;
       let alertUrl = document.getElementById('alert-url').href;
@@ -48,12 +47,60 @@ describe('WeatherView', () => {
 
 
 describe('WeatherController', () => {
-   it('adds new locations', () => {
+   before(() => {
+      document.body.innerHTML = '<div id="weather">' +
+          '<form><input id="autocomplete" value="Vancouver, BC, Canada"></input>' +
+          '</form>' +
+          '<div id="alerts"></div>' +
+          '<div id="no-locations"></div>' +
+          '</div>';
+      // sinon.replace(document, 'getElementById', sinon.fake(document.getElementById));
+   });
 
+   after(() => {
+      sinon.restore();
+   });
+
+   it('fails on unknown locations', async () => {
+      let controller = new WeatherController();
+
+      let fakeUnsuccessfulLocation = sinon.fake.returns(false);
+      sinon.replace(controller, 'getLocationToAdd', fakeUnsuccessfulLocation);
+
+      await controller.addLocation();
+
+      assert(fakeUnsuccessfulLocation.called);
+      assert(document.getElementById('error-alert'));
+      assert(document.getElementById('error-alert')
+          .innerHTML.includes("Location not found"));
    });
 
    it('deletes old locations', () => {
 
+   });
+
+   it('adds new locations', async () => {
+      let controller = new WeatherController();
+
+      let fakeLocations = sinon.fake.returns([
+         {
+            "lat": 49.393,
+            "lng": -123.493,
+            "full_name": "Vancouver",
+         }
+      ]);
+      sinon.replace(controller, 'getLocations', fakeLocations);
+
+      let fakeSuccessfulLocation = sinon.fake.returns({
+         "geometry": {
+            "lat": 49.393,
+            "lng": -123.493,
+         },
+         "address": "Vancouver, BC, Canada",
+      });
+      sinon.replace(controller, 'getLocationToAdd', fakeSuccessfulLocation);
+
+      await controller.addLocation();
    });
 });
 

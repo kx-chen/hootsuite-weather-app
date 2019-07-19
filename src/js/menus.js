@@ -32,3 +32,5 @@ function loadTopBars() {
 function bindTemperatureSelect() {
     let temperatureSelect = document.getElementById('temperature_select');
 }
+
+exports.loadTopBars = loadTopBars;

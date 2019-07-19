@@ -20,6 +20,7 @@
     "express": "^4.15.3",
     "js-sha512": "^0.4.0",
     "node-fetch": "^2.6.0",
+    "requirejs": "^2.3.6",
     "twit": "^2.2.9"
   },
   "engines": {
