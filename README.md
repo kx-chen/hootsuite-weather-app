@@ -1,7 +1,7 @@
 # Hootsuite Weather App
+[![Build Status](https://travis-ci.com/kx-chen/hs-weather-app.svg?branch=master)](https://travis-ci.com/kx-chen/hs-weather-app)
 
 > Get weather results right in your Hootsuite dashboard!
-
 
 TODO: 
 - [ ] Change class names in HTML from `hs_*`
