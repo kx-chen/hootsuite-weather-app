@@ -22,5 +22,4 @@ document.addEventListener('DOMContentLoaded',  () => {
     menus.loadTopBars();
 
     hsp.bind('refresh', () => weatherApp.refresh());
-    $('[data-toggle="tooltip"]').tooltip();
 });

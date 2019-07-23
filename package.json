@@ -6,7 +6,8 @@
   "scripts": {
     "test": "nyc ./node_modules/.bin/mocha",
     "start": "node index.js",
-    "lint": "eslint src/js/*.js"
+    "lint": "eslint src/js/*.js",
+    "build": "cd src/js && browserify index.js --s weatherBundle > bundle.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
     "express": "^4.15.3",
     "js-sha512": "^0.4.0",
     "node-fetch": "^2.6.0",
+    "node-fetch-polyfill": "^2.0.6",
     "requirejs": "^2.3.6",
     "twit": "^2.2.9"
   },
@@ -29,6 +31,7 @@
   "devDependencies": {
     "canvas": "^2.5.0",
     "eslint": "^6.0.1",
+    "fetch-mock": "^7.3.9",
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
     "mocha": "^6.1.4",

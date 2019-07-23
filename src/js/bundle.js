@@ -7,8 +7,6 @@ let settings = {
 const utils = require('./util.js');
 const autocomplete = require('./autocomplete.js');
 const constants = require('./constants.js');
-const menus = require('./menus.js');
-const index = require('./index.js');
 const { hsp } = require('./hsp.js');
 
 function WeatherModel(lat, lng, weatherID, full_name) {
@@ -28,12 +26,8 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     };
 
     this.lookup = async () => {
-        // TODO: fix return types
-        let weatherJson = await fetch(`${window.origin}/weather/${this.lat}/${this.lng}/ca`, {
-            "headers": new Headers({
-                "origin": window.location,
-            })
-        }).catch(() =>{
+        let weatherJson = await fetch(`${window.origin}/weather/${this.lat}/${this.lng}/ca`)
+            .catch(() =>{
             utils.displayError({
                 "message": "Sorry! Something went wrong."
             }, false);
@@ -113,6 +107,17 @@ function WeatherController() {
         }).catch((err) => console.log(err));
     };
 
+    this.displayLoading = (display) => {
+        if(display) {
+            document.getElementById('weather').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+        } else {
+            document.getElementById('weather').style.display = 'block';
+            document.getElementById('loading').style.display = 'none';
+        }
+
+    };
+
     this.refresh = async () => {
         this.locations = await this.getLocations();
         this.weatherModels = [];
@@ -120,14 +125,13 @@ function WeatherController() {
         if(this.locations.length > 0) {
             document.getElementById('no-locations').style.display = 'none';
         }
-        document.getElementById('weather').style.display = 'none';
-        document.getElementById('loading').style.display = 'block';
+       this.displayLoading(true);
+
         if (this.locations.length) {
             utils.clearDivContents('weather');
 
             for (let i = 0; i < this.locations.length; i++) {
                 if (this.locations[i]) {
-                    //TODO: if
                     let lat = this.locations[i].lat;
                     let lng = this.locations[i].lng;
                     let full_name = this.locations[i].full_name;
@@ -141,9 +145,8 @@ function WeatherController() {
             }
             this.updateLastUpdated();
         }
-        document.getElementById('weather').style.display = 'block';
-        document.getElementById('loading').style.display = 'none';
-        $('[data-toggle="tooltip"]').tooltip();
+
+        this.displayLoading(false);
     };
 
     this.updateLastUpdated = () => {
@@ -193,7 +196,7 @@ function WeatherController() {
         for(let i = 0; i < locations.length; i++) {
             let latInt = parseFloat(locations[i].lat);
             let lngInt = parseFloat(locations[i].lng);
-            if (latInt === lookupGeometry.lat && lngInt === lookupGeometry.lng) {
+            if (latInt === lookupGeometry.geometry.lat && lngInt === lookupGeometry.geometry.lng) {
                 utils.displayError({
                     "message": "Location already exists"
                 });
@@ -205,7 +208,7 @@ function WeatherController() {
             "lat": lookupGeometry.geometry.lat,
             "lng": lookupGeometry.geometry.lng,
         });
-        // locationForm.value = '';
+        document.getElementById('autocomplete').value = '';
 
         if(locations.length > 0) {
             document.getElementById('no-locations').style.display = 'none';
@@ -214,6 +217,7 @@ function WeatherController() {
         hsp.saveData(locations, () => {
             this.refresh();
         });
+        return locations;
     };
 
     this.removeLocation = async (index) => {
@@ -254,7 +258,7 @@ exports.WeatherModel = WeatherModel;
 exports.init = init;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./autocomplete.js":2,"./constants.js":3,"./hsp.js":4,"./index.js":5,"./menus.js":6,"./util.js":7}],2:[function(require,module,exports){
+},{"./autocomplete.js":2,"./constants.js":3,"./hsp.js":4,"./util.js":7}],2:[function(require,module,exports){
 let componentForm = {
     street_number: 'short_name',
     route: 'long_name',
@@ -1660,7 +1664,6 @@ document.addEventListener('DOMContentLoaded',  () => {
     menus.loadTopBars();
 
     hsp.bind('refresh', () => weatherApp.refresh());
-    $('[data-toggle="tooltip"]').tooltip();
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
