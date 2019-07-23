@@ -10,6 +10,7 @@ TODO:
 - [ ] Refactor return types of responses/geocode results to proper objects
 - [ ] Add eventlisteners instead of using `onclick` in HTML
 - [ ] Extract all error messages, class selectors, strings, urls into own file
+- [ ] Shorten code to under 80 columns
 
 
 Possible improvements: 
