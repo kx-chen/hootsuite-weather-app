@@ -39,10 +39,9 @@ describe('WeatherView', () => {
 
         new WeatherView(alertsModel).render();
 
-        let alertTitle = document.getElementById('alert-title').innerHTML;
-        let alertUrl = document.getElementById('alert-url').href;
-        assert.equal(alertTitle, 'Raining Pigs Alert');
-        assert.equal(alertUrl, 'pigs.com');
+        let alertBody = document.getElementById('alert-body');
+        assert.equal(alertBody.innerHTML, 'Raining Pigs Alert');
+        assert.equal(alertBody.href, 'pigs.com');
     });
 });
 
@@ -169,7 +168,6 @@ describe('WeatherController', () => {
         });
 
         await controller.refresh();
-        console.log(document.body.innerHTML);
         assert(document.getElementById('0'));
         assert(document.getElementById('1'));
     });

@@ -1,11 +1,11 @@
 let weatherApp;
-let settings = {
-    "units": "metric",
-};
+
 const utils = require('./util.js');
 const autocomplete = require('./autocomplete.js');
 const constants = require('./constants.js');
 const { hsp } = require('./hsp.js');
+
+const Mustache = require('mustache');
 
 function WeatherModel(lat, lng, weatherID, full_name) {
     this.id = weatherID;
@@ -26,10 +26,10 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     this.lookup = async () => {
         let weatherJson = await fetch(`${window.origin}/weather/${this.lat}/${this.lng}/ca`)
             .catch(() =>{
-            utils.displayError({
-                "message": "Sorry! Something went wrong."
-            }, false);
-            document.getElementById('loading').style.display = 'none';
+                utils.displayError({
+                    "message": constants.dialog.generic_error
+                }, false);
+                document.getElementById('loading').style.display = 'none';
         });
 
         if (weatherJson.status === 200) {
@@ -37,8 +37,9 @@ function WeatherModel(lat, lng, weatherID, full_name) {
         }
 
         utils.displayError({
-            "message": "Sorry! Something went wrong."
+            "message": constants.dialog.generic_error
         }, false);
+
         document.getElementById('loading').style.display = 'none';
         return false;
     };
@@ -58,33 +59,11 @@ function WeatherView(weatherModel) {
     this.render = () => {
         let weatherDiv = document.getElementById('weather');
 
-        weatherDiv.insertAdjacentHTML('afterbegin',
-            `<div class="hs_message" id="${this.weather.id}">
-                  <div class="hs_avatar">
-                    <img src="${this.weather.icon}" class="hs_avatarImage" alt="Avatar">
-                  </div>
-
-                  <div class="hs_content">
-                    <a onclick="hsp.showCustomPopup('https://hs-weather-app.herokuapp.com/weather-widget/${this.weather.lat}/${this.weather.lng}',
-                    'Weather for ${this.weather.full_name}');" class="hs_userName" target="_blank">${this.weather.full_name}</a>
-
-                    <div class="hs_contentText">
-                      <p>
-                        <span class="hs_postBody">${this.weather.temperature} Degrees | ${this.weather.weather}</span>
-                        <span class="remove_location close icon-app-dir x-clear"
-                                onclick="weatherApp.removeLocation(${this.weather.id});"></span>
-                      </p>
-                    </div>
-                  </div>
-                </div>`);
+        weatherDiv.insertAdjacentHTML('afterbegin', Mustache.render(constants.html.weather_entry, this.weather));
 
         if(this.weather['alerts'].length > 0) {
-            document.getElementById(this.weather.id).insertAdjacentHTML('beforeend',
-                `<div class="alert alert-info fade show" role="alert">
-                            <p id="alert-title">${this.weather['alerts'][0]['title']}</p>
-                           <a id="alert-url" href="${this.weather['alerts'][0]['uri']}" target="_blank">Read More</a>
-                       </div>
-            `)
+            console.log(this.weather.alerts);
+            document.getElementById(this.weather.id).insertAdjacentHTML('beforeend', Mustache.render(constants.html.weather_alert, this.weather));
         }
     };
 }
@@ -174,7 +153,7 @@ function WeatherController() {
 
         if (!lookupGeometry) {
             utils.displayError({
-                "message": "Location not found, please try again.",
+                "message": constants.dialog.location_not_found,
             });
             return;
         }
@@ -185,9 +164,9 @@ function WeatherController() {
         }
 
         // TODO: extract into a constant
-        if (locations.length >= 10) {
+        if (locations.length >= constants.limits.max_locations) {
             utils.displayError({
-                "message": "Sorry, you can't have more than 10 locations!"
+                "message": constants.dialog.too_many_locations,
             }, true);
             return;
         }
@@ -196,7 +175,7 @@ function WeatherController() {
             let lngInt = parseFloat(locations[i].lng);
             if (latInt === lookupGeometry.geometry.lat && lngInt === lookupGeometry.geometry.lng) {
                 utils.displayError({
-                    "message": "Location already exists"
+                    "message": constants.dialog.location_already_exists
                 });
                 return;
             }
