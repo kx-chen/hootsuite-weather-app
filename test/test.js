@@ -1,8 +1,14 @@
 const assert = require('assert');
 const sinon = require('sinon');
+const constants = require('../src/js/constants');
+const fakeTestObjects = require('./fakeTestObjects');
 global.fetch = require('node-fetch');
 
-const { WeatherModel, WeatherController, WeatherView, } = require('../src/js/bundle.js');
+const {
+    WeatherModel,
+    WeatherController,
+    WeatherView,
+} = require('../src/js/bundle');
 
 describe('WeatherView', () => {
     before(() => {
@@ -49,7 +55,7 @@ describe('WeatherView', () => {
 describe('WeatherController', () => {
     beforeEach( () => {
         document.body.innerHTML = '<div id="weather">' +
-            '<form><input id="autocomplete" value="Vancouver, BC, Canada"></input>' +
+            '<form><input id="autocomplete" value="Vancouver, BC, Canada">' +
             '</form>' +
             '</div>' +
             '<div id="alerts"></div>' +
@@ -72,7 +78,7 @@ describe('WeatherController', () => {
         assert(fakeUnsuccessfulLocation.called);
         assert(document.getElementById('error-alert'));
         assert(document.getElementById('error-alert')
-            .innerHTML.includes("Location not found"));
+            .innerHTML.includes(constants.dialog.location_not_found));
     });
 
     it('deletes old locations', () => {
@@ -102,7 +108,8 @@ describe('WeatherController', () => {
 
         let result = await controller.addLocation();
         assert.equal(result.length, 2);
-        assert.equal(result[1].full_name, "San Francisco, California, USA");
+        assert.equal(result[1].full_name,
+            "San Francisco, California, USA");
         assert.equal(document.getElementById('autocomplete').value, '');
     });
 
@@ -128,7 +135,7 @@ describe('WeatherController', () => {
         sinon.replace(controller, 'getLocationToAdd', fakeSuccessfulLocation);
 
         await controller.addLocation();
-        assert(document.body.innerHTML.includes('Location already exists'));
+        assert(document.body.innerHTML.includes(constants.dialog.location_already_exists));
     });
 
     it('renders all locations', async () => {
@@ -170,6 +177,10 @@ describe('WeatherController', () => {
         await controller.refresh();
         assert(document.getElementById('0'));
         assert(document.getElementById('1'));
+    });
+
+    it('remove all locations', () => {
+
     });
 });
 

@@ -710,7 +710,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     };
 
     this.lookup = async () => {
-        let weatherJson = await fetch(`${window.origin}/weather/${this.lat}/${this.lng}/ca`)
+        let weatherJson = await fetch(window.origin + Mustache.render(constants.urls.weather_lookup, this))
             .catch(() =>{
                 utils.displayError({
                     "message": constants.dialog.generic_error
@@ -859,6 +859,7 @@ function WeatherController() {
         for(let i = 0; i < locations.length; i++) {
             let latInt = parseFloat(locations[i].lat);
             let lngInt = parseFloat(locations[i].lng);
+
             if (latInt === lookupGeometry.geometry.lat && lngInt === lookupGeometry.geometry.lng) {
                 utils.displayError({
                     "message": constants.dialog.location_already_exists
@@ -1002,8 +1003,7 @@ const limits = {
 };
 
 const urls = {
-    "weather_base_url": "",
-    "more_info_url": "",
+    "weather_lookup": "/weather/{{lat}}/{{lng}}/ca",
 };
 
 const html = {
@@ -1039,6 +1039,7 @@ const html = {
 exports.html = html;
 exports.dialog = dialog;
 exports.limits = limits;
+exports.urls = urls;
 
 },{}],5:[function(require,module,exports){
 //This SDK file is compatible with SDK 0.5, SDK 0.6 and SDK 2.0

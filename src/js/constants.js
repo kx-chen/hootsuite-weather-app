@@ -10,8 +10,7 @@ const limits = {
 };
 
 const urls = {
-    "weather_base_url": "",
-    "more_info_url": "",
+    "weather_lookup": "/weather/{{lat}}/{{lng}}/ca",
 };
 
 const html = {
@@ -47,3 +46,4 @@ const html = {
 exports.html = html;
 exports.dialog = dialog;
 exports.limits = limits;
+exports.urls = urls;
