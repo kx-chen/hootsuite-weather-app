@@ -71,7 +71,9 @@ describe('WeatherController', () => {
         let controller = new WeatherController();
 
         let fakeUnsuccessfulLocation = sinon.fake.returns(false);
+        let fakeLocations = sinon.fake.returns([]);
         sinon.replace(controller, 'getLocationToAdd', fakeUnsuccessfulLocation);
+        sinon.replace(controller, 'getLocations', fakeLocations);
 
         await controller.addLocation();
 

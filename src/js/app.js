@@ -1,18 +1,13 @@
-let weatherApp;
-
-const utils = require('./util.js');
 const autocomplete = require('./autocomplete.js');
 const constants = require('./constants.js');
 const { hsp } = require('./hsp.js');
+const utils = require('./util.js');
 
 const Mustache = require('mustache');
 
+
 function WeatherModel(lat, lng, weatherID, full_name) {
     this.id = weatherID;
-    this.temperature = '';
-    this.name = '';
-    this.icon = '';
-    this.weather = '';
     this.lat = lat;
     this.lng = lng;
     this.full_name = full_name;
@@ -29,7 +24,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
                 utils.displayError({
                     "message": constants.dialog.generic_error
                 }, false);
-                document.getElementById('loading').style.display = 'none';
+                utils.displayLoading(false);
         });
 
         if (weatherJson.status === 200) {
@@ -40,7 +35,7 @@ function WeatherModel(lat, lng, weatherID, full_name) {
             "message": constants.dialog.generic_error
         }, false);
 
-        document.getElementById('loading').style.display = 'none';
+        utils.displayLoading(false);
         return false;
     };
 
@@ -59,11 +54,16 @@ function WeatherView(weatherModel) {
     this.render = () => {
         let weatherDiv = document.getElementById('weather');
 
-        weatherDiv.insertAdjacentHTML('afterbegin', Mustache.render(constants.html.weather_entry, this.weather));
+        weatherDiv
+            .insertAdjacentHTML('afterbegin',
+                                Mustache.render(
+                                    constants.html.weather_entry,
+                                    this.weather));
 
         if(this.weather['alerts'].length > 0) {
-            console.log(this.weather.alerts);
-            document.getElementById(this.weather.id).insertAdjacentHTML('beforeend', Mustache.render(constants.html.weather_alert, this.weather));
+            document.getElementById(this.weather.id)
+                .insertAdjacentHTML('beforeend',
+                    Mustache.render(constants.html.weather_alert, this.weather));
         }
     };
 }
@@ -75,24 +75,14 @@ function WeatherController() {
     this.getLocations = async () => {
         return new Promise((resolve) => {
             hsp.getData((data) => {
-                if(data) {
-                    resolve(data);
-                } else {
-                    resolve([]);
-                }
+                data ? resolve(data) : resolve([])
             });
-        }).catch((err) => console.log(err));
-    };
-
-    this.displayLoading = (display) => {
-        if(display) {
-            document.getElementById('weather').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-        } else {
-            document.getElementById('weather').style.display = 'block';
-            document.getElementById('loading').style.display = 'none';
-        }
-
+        }).catch((err) => {
+            console.log(err);
+            utils.displayError({
+                "message": constants.dialog.error_getting_saved_locations
+            })
+        });
     };
 
     this.refresh = async () => {
@@ -102,18 +92,17 @@ function WeatherController() {
         if(this.locations.length > 0) {
             document.getElementById('no-locations').style.display = 'none';
         }
-       this.displayLoading(true);
+       utils.displayLoading(true);
 
         if (this.locations.length) {
             utils.clearDivContents('weather');
 
             for (let i = 0; i < this.locations.length; i++) {
                 if (this.locations[i]) {
-                    let lat = this.locations[i].lat;
-                    let lng = this.locations[i].lng;
-                    let full_name = this.locations[i].full_name;
-
-                    let model = new WeatherModel(lat, lng, i, full_name);
+                    let model = new WeatherModel(this.locations[i].lat,
+                                                 this.locations[i].lng,
+                                                 i,
+                                                this.locations[i].full_name);
                     await model.init();
 
                     new WeatherView(model).render();
@@ -123,7 +112,7 @@ function WeatherController() {
             this.updateLastUpdated();
         }
 
-        this.displayLoading(false);
+        utils.displayLoading(false);
     };
 
     this.updateLastUpdated = () => {
@@ -133,11 +122,7 @@ function WeatherController() {
     this.getLocationToAdd = async () => {
         let address = await autocomplete.getAutocompleteAddress();
         let lookupGeometry = await autocomplete.getLatLng(address);
-        // TODO: rename
-        let res = await utils.checkIfLocationValid({
-            "lat": lookupGeometry.lat,
-            "lng": lookupGeometry.lng,
-        });
+        let res = await utils.checkIfLocationValid(new Location(lookupGeometry.lat, lookupGeometry.lng));
 
         if(res) {
             return {
@@ -149,43 +134,27 @@ function WeatherController() {
     };
 
     this.addLocation = async () => {
+        let error = false;
         let lookupGeometry = await this.getLocationToAdd();
-
-        if (!lookupGeometry) {
-            utils.displayError({
-                "message": constants.dialog.location_not_found,
-            });
-            return;
-        }
-
         let locations = await this.getLocations();
+
         if (!locations) {
             locations = [];
         }
 
-        // TODO: extract into a constant
-        if (locations.length >= constants.limits.max_locations) {
-            utils.displayError({
-                "message": constants.dialog.too_many_locations,
-            }, true);
+        await this.validateLocations(locations, lookupGeometry)
+            .catch((err) => {
+                utils.displayError({
+                    "message": err.message,
+                });
+                error = true;
+            });
+
+        if(error){
             return;
         }
-        for(let i = 0; i < locations.length; i++) {
-            let latInt = parseFloat(locations[i].lat);
-            let lngInt = parseFloat(locations[i].lng);
 
-            if (latInt === lookupGeometry.geometry.lat && lngInt === lookupGeometry.geometry.lng) {
-                utils.displayError({
-                    "message": constants.dialog.location_already_exists
-                });
-                return;
-            }
-        }
-        locations.push({
-            "full_name": lookupGeometry.address,
-            "lat": lookupGeometry.geometry.lat,
-            "lng": lookupGeometry.geometry.lng,
-        });
+        locations.push(new Location(lookupGeometry.geometry.lat, lookupGeometry.geometry.lng, lookupGeometry.address));
         document.getElementById('autocomplete').value = '';
 
         if(locations.length > 0) {
@@ -208,13 +177,10 @@ function WeatherController() {
         });
 
         this.weatherModels.forEach((result) => {
-            locationsList.push({
-                "full_name": result.full_name,
-                "lat": result.lat,
-                "lng": result.lng,
-            });
+            locationsList.push(new Location(result.lat, result.lng, result.full_name));
         });
 
+        // TODO: extract into function
         if(locationsList.length === 0) {
             document.getElementById('no-locations').style.display = 'block';
             document.getElementById('last_updated').innerHTML = 'Last updated: never';
@@ -222,6 +188,40 @@ function WeatherController() {
 
         hsp.saveData(locationsList);
     };
+
+    this.validateLocations = async (locations, lookupGeometry) => {
+        return new Promise((resolve, reject) => {
+            if (!lookupGeometry) {
+                reject({
+                    "message": constants.dialog.location_not_found,
+                });
+            }
+
+            if (locations.length >= constants.limits.max_locations) {
+                reject({
+                    "message": constants.dialog.too_many_locations,
+                });
+            }
+
+            for(let i = 0; i < locations.length; i++) {
+                let latInt = parseFloat(locations[i].lat);
+                let lngInt = parseFloat(locations[i].lng);
+
+                if (latInt === lookupGeometry.geometry.lat && lngInt === lookupGeometry.geometry.lng) {
+                    reject({
+                        "message": constants.dialog.location_already_exists,
+                    });
+                }
+            }
+            resolve();
+        });
+    };
+}
+
+function Location(lat, lng, full_name) {
+    this.full_name = full_name;
+    this.lat = lat;
+    this.lng = lng;
 }
 
 function init() {

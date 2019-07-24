@@ -48,8 +48,24 @@ function removeAllLocations() {
     document.getElementById('last_updated').innerHTML = 'Last updated: never';
 }
 
+function toggleLoading() {
+    document.getElementById('loading').style.display = 'none';
+}
+
+function displayLoading(display) {
+    if(display) {
+        document.getElementById('weather').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+    } else {
+        document.getElementById('weather').style.display = 'block';
+        document.getElementById('loading').style.display = 'none';
+    }
+
+}
+
 exports.displayError = displayError;
 exports.checkIfLocationValid = checkIfLocationValid;
 exports.removeAllLocations = removeAllLocations;
 exports.deleteDiv = deleteDiv;
 exports.clearDivContents = clearDivContents;
+exports.displayLoading = displayLoading;

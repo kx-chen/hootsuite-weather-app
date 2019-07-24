@@ -3,6 +3,7 @@ const dialog = {
     "location_not_found": "Location not found, please try again.",
     "too_many_locations": "Sorry, you can't add more than 10 locations!",
     "location_already_exists": "Location already exists!",
+    "error_getting_saved_locations": "Sorry, there was an error getting your saved locations!",
 };
 
 const limits = {
