@@ -692,6 +692,14 @@ const utils = require('./util.js');
 const Mustache = require('mustache');
 
 
+/**
+ * Holds the data for each weather result/city.
+ * @class
+ * @param {float} lat - Latitude of the location
+ * @param {float} lng - Longitude of the location
+ * @param {int} weatherID - The ID of the model, used as the HTML ID for the result
+ * @param {string} full_name - Full name of the city/location
+ */
 function WeatherModel(lat, lng, weatherID, full_name) {
     this.id = weatherID;
     this.lat = lat;
@@ -699,11 +707,20 @@ function WeatherModel(lat, lng, weatherID, full_name) {
     this.full_name = full_name;
     this.alerts = [];
 
+    /**
+     * Initializes the WeatherModel by fetching and parsing the weather using the lat and lng.
+     * @async
+     */
     this.init = async () => {
         this.weatherJson = await this.lookup();
         this.weatherResult = await this.parseWeatherResults();
     };
 
+    /**
+     * Fetches and saves the weather info by calling the weather api.
+     * @async
+     * @returns {object} JSON from the weather api.
+     */
     this.lookup = async () => {
         let weatherJson = await fetch(window.origin + Mustache.render(constants.urls.weather_lookup, this))
             .catch(() =>{
@@ -725,6 +742,10 @@ function WeatherModel(lat, lng, weatherID, full_name) {
         return false;
     };
 
+    /**
+     * Parses the JSON returned from the weather api and saves the required data.
+     * @async
+     */
     this.parseWeatherResults = async () => {
         this.temperature = Math.round(this.weatherJson['currently']['temperature']);
         this.weather = this.weatherJson['currently']['summary'];
@@ -734,9 +755,18 @@ function WeatherModel(lat, lng, weatherID, full_name) {
 }
 
 
+/**
+ * Responsible for displaying and rendering the weather info to the HTML.
+ * @class
+ * @param {WeatherModel} weatherModel - Data to be rendered in
+ */
 function WeatherView(weatherModel) {
     this.weather = weatherModel;
 
+    /**
+     * Renders the weather data and alerts.
+     * @async
+     */
     this.render = () => {
         let weatherDiv = document.getElementById('weather');
 
@@ -755,9 +785,18 @@ function WeatherView(weatherModel) {
 }
 
 
+/**
+ * Controller responsible for the overall logic of the app.
+ * @class
+ */
 function WeatherController() {
     this.weatherModels = [];
 
+    /**
+     * Fetches the user saved locations from the Hootsuite SDK.
+     * @async
+     * @returns {array} Array of saved Location objects.
+     */
     this.getLocations = async () => {
         return new Promise((resolve) => {
             hsp.getData((data) => {
@@ -771,6 +810,10 @@ function WeatherController() {
         });
     };
 
+    /**
+     * Refreshes the weather results on the page.
+     * @async
+     */
     this.refresh = async () => {
         this.locations = await this.getLocations();
         this.weatherModels = [];
@@ -801,15 +844,24 @@ function WeatherController() {
         utils.displayLoading(false);
     };
 
+    /**
+     * Updates the 'last updated' time on page.
+     */
     this.updateLastUpdated = () => {
         document.getElementById('last_updated').innerHTML = `Last updated: ${new Date()}`;
     };
 
+    /**
+     * Gets the lat/lng and address of the location typed into the 'add location' form.
+     * @async
+     * @returns {object} Geometry (lat/lng) and address of location to be added.
+     */
     this.getLocationToAdd = async () => {
         let address = await autocomplete.getAutocompleteAddress();
         let lookupGeometry = await autocomplete.getLatLng(address);
         let res = await utils.checkIfLocationValid(new Location(lookupGeometry.lat, lookupGeometry.lng));
 
+        // TODO: Change into object
         if(res) {
             return {
                 "geometry": lookupGeometry,
@@ -819,6 +871,11 @@ function WeatherController() {
         return false;
     };
 
+    /**
+     * Saves, validates and updates the location just added by the user.
+     * @async
+     * @returns {array} Saved locations by the user, including the newly added one.
+     */
     this.addLocation = async () => {
         let error = false;
         let lookupGeometry = await this.getLocationToAdd();
@@ -853,6 +910,11 @@ function WeatherController() {
         return locations;
     };
 
+     /**
+     * Removes the location specified by ID.
+     * @async
+      * @param {int} index - Index of the location to remove.
+     */
     this.removeLocation = async (index) => {
         utils.deleteDiv(index);
 
@@ -875,6 +937,13 @@ function WeatherController() {
         hsp.saveData(locationsList);
     };
 
+    /**
+     * Validate the location about to be added.
+     * @async
+     * @param {array} locations - List of currently saved locations.
+     * @param {object} lookupGeometry - Lat/lng and address of the location about to be added.
+     * @returns {array} Array of saved Location objects.
+     */
     this.validateLocations = async (locations, lookupGeometry) => {
         return new Promise((resolve, reject) => {
             if (!lookupGeometry) {
@@ -904,6 +973,13 @@ function WeatherController() {
     };
 }
 
+/**
+ * Respresents a saved location, storing its lat/lng and full name.
+ * @class
+ * @param {float} lat - Latitude of location.
+ * @param {float} lng - Longitude of location.
+ * @param {string} full_name - Full name/address of the location.
+ */
 function Location(lat, lng, full_name) {
     this.full_name = full_name;
     this.lat = lat;
