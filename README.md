@@ -5,11 +5,13 @@
 
 TODO: 
 - [ ] Change class names in HTML from `hs_*`
-- [ ] Remove repetition in tests, especially with the dummy data and dummy response JSON
-- [ ] Remove inline HTML
+- [x] Remove repetition in tests, especially with the dummy data and dummy response JSON
+- [x] Remove inline HTML
 - [ ] Refactor return types of responses/geocode results to proper objects
+    - [x] in tests
+    - [ ] in app code
 - [ ] Add eventlisteners instead of using `onclick` in HTML
-- [ ] Extract all error messages, class selectors, strings, urls into own file
+- [x] Extract all error messages, class selectors, strings, urls into own file
 - [ ] Shorten code to under 80 columns
 
 

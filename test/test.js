@@ -1,7 +1,8 @@
 const assert = require('assert');
-const sinon = require('sinon');
 const constants = require('../src/js/constants');
 const fakeTestObjects = require('./fakeTestObjects');
+
+const sinon = require('sinon');
 global.fetch = require('node-fetch');
 
 const {
@@ -141,12 +142,15 @@ describe('WeatherController', () => {
 });
 
 describe('WeatherModel', () => {
-    it('fetches location data', () => {
+    it('fetches location data', async () => {
         sinon.stub(global, 'fetch').callsFake(() => {
             return new Promise((resolve) => {
                 resolve(fakeTestObjects.fakeWeatherResponse);
             });
         });
+
+        let model = new WeatherModel(1.11, 2.22, 0, "Generic Location");
+        await model.init();
 
     });
 
