@@ -923,6 +923,8 @@ exports.init = init;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./autocomplete.js":3,"./constants.js":4,"./hsp.js":5,"./util.js":8,"mustache":1}],3:[function(require,module,exports){
+const constants = require('./constants');
+const utils = require('./util');
 let componentForm = {
     street_number: 'short_name',
     route: 'long_name',
@@ -979,9 +981,9 @@ function getAutocompleteAddress() {
             }
             resolve(address);
         } else {
-            displayError({
-                "message": "Sorry, that location could not be found. Please select a location from the suggestions.",
-            })
+            utils.displayError({
+                "message": constants.dialog.error_geocoding,
+            });
         }
     });
 }
@@ -990,13 +992,14 @@ exports.getAutocompleteAddress = getAutocompleteAddress;
 exports.getLatLng = getLatLng;
 exports.geolocate = geolocate;
 
-},{}],4:[function(require,module,exports){
+},{"./constants":4,"./util":8}],4:[function(require,module,exports){
 const dialog = {
     "generic_error": "Sorry, something went wrong!",
     "location_not_found": "Location not found, please try again.",
     "too_many_locations": "Sorry, you can't add more than 10 locations!",
     "location_already_exists": "Location already exists!",
     "error_getting_saved_locations": "Sorry, there was an error getting your saved locations!",
+    "error_geocoding": "Sorry, that location could not be found. Please select a location from the suggestions.",
 };
 
 const limits = {

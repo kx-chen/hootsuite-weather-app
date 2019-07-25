@@ -90,50 +90,26 @@ describe('WeatherController', () => {
     it('saves new locations', async () => {
         let controller = new WeatherController();
 
-        let fakeLocations = sinon.fake.returns([
-            {
-                "lat": 49.393,
-                "lng": -123.493,
-                "full_name": "Vancouver, BC, Canada",
-            }
-        ]);
+        let fakeLocations = sinon.fake.returns(fakeTestObjects.fakeLocation2);
         sinon.replace(controller, 'getLocations', fakeLocations);
 
-        let fakeSuccessfulLocation = sinon.fake.returns({
-            "geometry": {
-                "lat": 39.30,
-                "lng": -13.493,
-            },
-            "address": "San Francisco, California, USA",
-        });
-        sinon.replace(controller, 'getLocationToAdd', fakeSuccessfulLocation);
+        let fakeLookup = sinon.fake.returns(fakeTestObjects.fakeLookup1);
+        sinon.replace(controller, 'getLocationToAdd', fakeLookup);
 
         let result = await controller.addLocation();
         assert.equal(result.length, 2);
         assert.equal(result[1].full_name,
-            "San Francisco, California, USA");
+            fakeTestObjects.fakeLookup1.address);
         assert.equal(document.getElementById('autocomplete').value, '');
     });
 
     it('rejects duplicates', async () => {
         let controller = new WeatherController();
 
-        let fakeLocations = sinon.fake.returns([
-            {
-                "lat": 49.393,
-                "lng": -123.493,
-                "full_name": "Duplicate",
-            }
-        ]);
+        let fakeLocations = sinon.fake.returns(fakeTestObjects.fakeLocation1);
         sinon.replace(controller, 'getLocations', fakeLocations);
 
-        let fakeSuccessfulLocation = sinon.fake.returns({
-            "geometry": {
-                "lat": 49.393,
-                "lng": -123.493,
-            },
-            "address": "Duplicate",
-        });
+        let fakeSuccessfulLocation = sinon.fake.returns(fakeTestObjects.fakeLookup1);
         sinon.replace(controller, 'getLocationToAdd', fakeSuccessfulLocation);
 
         await controller.addLocation();
@@ -143,40 +119,18 @@ describe('WeatherController', () => {
     it('renders all locations', async () => {
         let controller = new WeatherController();
 
-        let fakeLocations = sinon.fake.returns([
-            {
-                "lat": 1.111,
-                "lng": 1.111,
-                "full_name": "Location 1",
-            },
-            {
-                "lat": 2.222,
-                "lng": 2.222,
-                "full_name": "Location 2",
-            }
-        ]);
+        let fakeLocations = sinon.fake.returns(fakeTestObjects.fakeLocations);
         sinon.replace(controller, 'getLocations', fakeLocations);
         sinon.replace(controller, 'updateLastUpdated', sinon.fake());
 
-        // TODO: replace with fake response obj
         sinon.stub(global, 'fetch').callsFake(() => {
             return new Promise((resolve) => {
-               resolve({
-                   "status": 200,
-                   "json": () => {
-                       return {
-                           "currently": {
-                               "temperature": 30.00,
-                               "summary": "raining pigs",
-                               "icon": "pigs",
-                           }
-                       }
-                   }
-               });
+               resolve(fakeTestObjects.fakeWeatherResponse);
             });
         });
 
         await controller.refresh();
+        // TODO: proper assertions
         assert(document.getElementById('0'));
         assert(document.getElementById('1'));
     });
@@ -190,18 +144,7 @@ describe('WeatherModel', () => {
     it('fetches location data', () => {
         sinon.stub(global, 'fetch').callsFake(() => {
             return new Promise((resolve) => {
-                resolve({
-                    "status": 200,
-                    "json": () => {
-                        return {
-                            "currently": {
-                                "temperature": 30.00,
-                                "summary": "raining pigs",
-                                "icon": "pigs",
-                            }
-                        }
-                    }
-                });
+                resolve(fakeTestObjects.fakeWeatherResponse);
             });
         });
 

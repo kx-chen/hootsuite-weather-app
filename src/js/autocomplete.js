@@ -1,3 +1,5 @@
+const constants = require('./constants');
+const utils = require('./util');
 let componentForm = {
     street_number: 'short_name',
     route: 'long_name',
@@ -54,9 +56,9 @@ function getAutocompleteAddress() {
             }
             resolve(address);
         } else {
-            displayError({
-                "message": "Sorry, that location could not be found. Please select a location from the suggestions.",
-            })
+            utils.displayError({
+                "message": constants.dialog.error_geocoding,
+            });
         }
     });
 }
