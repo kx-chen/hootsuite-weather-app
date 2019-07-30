@@ -64,7 +64,7 @@ describe('WeatherController', () => {
             '<div id="loading"></div>';
     });
 
-    after(() => {
+    afterEach(() => {
         sinon.restore();
     });
 
