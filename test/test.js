@@ -64,7 +64,7 @@ describe('WeatherController', () => {
             '<div id="loading"></div>';
     });
 
-    after(() => {
+    afterEach(() => {
         sinon.restore();
     });
 
@@ -73,8 +73,8 @@ describe('WeatherController', () => {
 
         let fakeUnsuccessfulLocation = sinon.fake.returns(false);
         let fakeLocations = sinon.fake.returns([]);
-        sinon.replace(controller, 'getLocationToAdd', fakeUnsuccessfulLocation);
-        sinon.replace(controller, 'getLocations', fakeLocations);
+        sinon.replace(WeatherController.prototype, 'getLocationToAdd', fakeUnsuccessfulLocation);
+        sinon.replace(WeatherController.prototype, 'getLocations', fakeLocations);
 
         await controller.addLocation();
 
@@ -92,10 +92,10 @@ describe('WeatherController', () => {
         let controller = new WeatherController();
 
         let fakeLocations = sinon.fake.returns(fakeTestObjects.fakeLocation2);
-        sinon.replace(controller, 'getLocations', fakeLocations);
+        sinon.replace(WeatherController.prototype, 'getLocations', fakeLocations);
 
         let fakeLookup = sinon.fake.returns(fakeTestObjects.fakeLookup1);
-        sinon.replace(controller, 'getLocationToAdd', fakeLookup);
+        sinon.replace(WeatherController.prototype, 'getLocationToAdd', fakeLookup);
 
         let result = await controller.addLocation();
         assert.equal(result.length, 2);
@@ -108,10 +108,10 @@ describe('WeatherController', () => {
         let controller = new WeatherController();
 
         let fakeLocations = sinon.fake.returns(fakeTestObjects.fakeLocation1);
-        sinon.replace(controller, 'getLocations', fakeLocations);
+        sinon.replace(WeatherController.prototype, 'getLocations', fakeLocations);
 
         let fakeSuccessfulLocation = sinon.fake.returns(fakeTestObjects.fakeLookup1);
-        sinon.replace(controller, 'getLocationToAdd', fakeSuccessfulLocation);
+        sinon.replace(WeatherController.prototype, 'getLocationToAdd', fakeSuccessfulLocation);
 
         await controller.addLocation();
         assert(document.body.innerHTML.includes(constants.dialog.location_already_exists));

@@ -7,7 +7,7 @@
     "test": "nyc ./node_modules/.bin/mocha",
     "start": "node index.js",
     "lint": "eslint src/js/*.js",
-    "build": "cd src/js && browserify index.js --s weatherBundle > bundle.js"
+    "build": "cd src/js && browserify index.js --s weatherBundle -p esmify > bundle.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   "devDependencies": {
     "canvas": "^2.5.0",
     "eslint": "^6.0.1",
+    "esmify": "^2.1.1",
     "fetch-mock": "^7.3.9",
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
