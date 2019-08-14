@@ -2,6 +2,27 @@
 [![Build Status](https://travis-ci.com/kx-chen/hs-weather-app.svg?branch=master)](https://travis-ci.com/kx-chen/hs-weather-app)
 
 > Get weather results right in your Hootsuite dashboard!
+## Structure
+
+`src/js/`
+
+Main JavaScript code for the app is here, including utils, some libraries, etc.
+
+`src/js/app.js`
+
+The actual code for the app. 
+
+`tests/`
+
+Tests for the app.
+
+`index.js`
+
+Backend/node server for the app. 
+
+`views/`
+
+Contains the HTML templates for the app.
 
 TODO: 
 - [ ] Change class names in HTML from `hs_*`
