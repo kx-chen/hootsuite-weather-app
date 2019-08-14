@@ -1,3 +1,4 @@
+//TODO: Modernize code. loadTopBars came as part of the Hootsuite sample app, which is what this app is based off of.
 function loadTopBars() {
     var topBarControls = document.getElementsByClassName('hs_topBarControlsBtn');
 
