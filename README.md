@@ -1,5 +1,5 @@
 # Hootsuite Weather App
-[![Build Status](https://travis-ci.com/kx-chen/hs-weather-app.svg?branch=master)](https://travis-ci.com/kx-chen/hs-weather-app)
+[![Build Status](https://travis-ci.org/kx-chen/hs-weather-app.svg?branch=master)](https://travis-ci.com/kx-chen/hs-weather-app)
 
 > Get weather results right in your Hootsuite dashboard!
 ## Structure
