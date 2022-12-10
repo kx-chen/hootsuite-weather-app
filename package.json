@@ -19,7 +19,7 @@
     "body-parser": "^1.18.2",
     "browserify": "^16.3.0",
     "ejs": "^2.6.2",
-    "express": "^4.15.3",
+    "express": "^4.17.3",
     "js-sha512": "^0.4.0",
     "mustache": "^3.0.1",
     "node-fetch": "^2.6.0",
